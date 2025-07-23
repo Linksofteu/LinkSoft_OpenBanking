@@ -1,0 +1,56 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <RootNamespace>Workbench</RootNamespace>
+        <LangVersion>10</LangVersion>
+        <UserSecretsId>07b96b41-edd2-4848-a6e6-2c4a81cb9d67</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="FastEndpoints" Version="6.2.0"/>
+        <PackageReference Include="FastEndpoints.Swagger" Version="6.2.0"/>
+        <PackageReference Include="JetBrains.Annotations" Version="2024.3.0"/>
+        <PackageReference Include="Microsoft.Extensions.Caching.Hybrid" Version="9.7.0"/>
+        <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.1"/>
+        <PackageReference Include="NSwag.MSBuild" Version="14.4.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Folder Include="AppData\"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\LinkSoft.OpenBanking.Komercka.AccountDirectAccess\LinkSoft.OpenBanking.Komercka.AccountDirectAccess.csproj"/>
+        <ProjectReference Include="..\LinkSoft.OpenBanking.Komercka.Client\LinkSoft.OpenBanking.Komercka.Client.csproj"/>
+    </ItemGroup>
+
+    <PropertyGroup>
+        <FrontendProjectDirectory>$(MSBuildThisFileDirectory)..\Workbench.Frontend\</FrontendProjectDirectory>
+    </PropertyGroup>
+    <Target Name="NSwag" AfterTargets="PostBuildEvent">
+        <Exec WorkingDirectory="$(ProjectDir)" EnvironmentVariables="ASPNETCORE_ENVIRONMENT=Development" Command="$(NSwagExe_Net90) aspnetcore2openapi /project:$(MSBuildProjectName).csproj /output:$(MSBuildProjectName).nswag.json /nobuild:true"/>
+    </Target>
+    <Target Name="apiGenerator" DependsOnTargets="PNPMInstall" AfterTargets="NSwag" Inputs="$(MSBuildProjectName).nswag.json" Outputs="$(FrontendProjectDirectory)src\api\api.generated.ts">
+        <Exec Command="node $(FrontendProjectDirectory)scripts/generate.api.mjs silent"/>
+    </Target>
+
+    <Target Name="CheckForPNPM">
+        <Exec Command="pnpm --version" ContinueOnError="true">
+            <Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
+        </Exec>
+        <Error Condition="'$(ErrorCode)' != '0'" Text="You must install node and pnpm to build this project"/>
+    </Target>
+
+    <Target Name="PNPMInstall" AfterTargets="CheckForPNPM">
+        <Error Condition="'$(FrontendProjectDirectory)'==''" Text="You must pass a FrontendProjectDirectory property into this target"/>
+        <Exec Command="pnpm install" WorkingDirectory="$(FrontendProjectDirectory)"/>
+    </Target>
+
+
+</Project>

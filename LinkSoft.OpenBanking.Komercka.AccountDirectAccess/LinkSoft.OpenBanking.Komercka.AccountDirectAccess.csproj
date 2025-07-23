@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <LangVersion>10</LangVersion>
+        <TargetFrameworks>net9.0;net6.0</TargetFrameworks>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="JetBrains.Annotations" Version="2024.3.0"/>
+        <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.1"/>
+        <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.12.1"/>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\LinkSoft.OpenBanking.Komercka.Client\LinkSoft.OpenBanking.Komercka.Client.csproj"/>
+    </ItemGroup>
+
+</Project>

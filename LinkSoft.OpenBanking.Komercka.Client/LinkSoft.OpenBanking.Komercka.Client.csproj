@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <LangVersion>13</LangVersion>
+        <PackageId>LinkSoft.OpenBanking.Komercka.Client</PackageId>
+        <TargetFrameworks>net9.0;net6.0</TargetFrameworks>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Folder Include="OpenApi\"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="JetBrains.Annotations" Version="2024.3.0"/>
+        <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.2"/>
+        <PackageReference Include="NSwag.MSBuild" Version="14.4.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+
+    <Target Name="NSwag" AfterTargets="Build"
+            Inputs="$(MSBuildThisFileDirectory)\OpenApi\ADAA.Client.nswag;$(MSBuildThisFileDirectory)\AccountDirectAccessAPI-v2.json"
+            Outputs="$(MSBuildThisFileDirectory)\AccountDirectAccess.Client.generated.cs;$(MSBuildThisFileDirectory)\AccountDirectAccess.Contract.generated.cs">
+        <Exec Command="$(NSwagExe_Net90) run $(MSBuildThisFileDirectory)\OpenApi\ADAA.Client.nswag /variables:Configuration=$(Configuration)"/>
+    </Target>
+    <!--    <Target Name="NSwag" AfterTargets="Build" -->
+    <!--            Inputs="$(MSBuildThisFileDirectory)\OpenApi\ClientRegistration.nswag'$(MSBuildThisFileDirectory)\ClientRegistration-v3.json" -->
+    <!--            Outputs="$(MSBuildThisFileDirectory)\ClientRegistration.Client.generated.cs;$(MSBuildThisFileDirectory)\ClientRegistration.Contract.generated.cs">-->
+    <!--        <Exec Command="$(NSwagExe_Net90) run $(MSBuildThisFileDirectory)\OpenApi\ClientRegistration.nswag /variables:Configuration=$(Configuration)"/>-->
+    <!--    </Target>-->
+</Project>

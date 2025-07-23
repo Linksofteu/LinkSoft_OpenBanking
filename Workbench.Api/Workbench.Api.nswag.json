@@ -1,0 +1,1043 @@
+{
+  "x-generator": "NSwag v14.4.0.0 (NJsonSchema v11.3.2.0 (Newtonsoft.Json v13.0.0.0))",
+  "openapi": "3.0.0",
+  "info": {
+    "title": "OpenBanking Workbench API",
+    "version": "v1"
+  },
+  "paths": {
+    "/api/applications": {
+      "post": {
+        "tags": [
+          "Applications"
+        ],
+        "operationId": "CreateApplicationEndpoint",
+        "requestBody": {
+          "x-name": "SoftwareStatementRegistrationDocumentModel",
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SoftwareStatementRegistrationDocumentModel"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountDirectAccessApplicationManifest"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Applications"
+        ],
+        "operationId": "GetAllApplicationsEndpoint",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AccountDirectAccessApplicationManifest"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/applications/{applicationId}/accounts": {
+      "get": {
+        "tags": [
+          "Applications"
+        ],
+        "operationId": "GetAccountsEndpoint",
+        "parameters": [
+          {
+            "name": "applicationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Account"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/applications/{applicationId}/accounts/{accountId}/transactions": {
+      "get": {
+        "tags": [
+          "Applications"
+        ],
+        "operationId": "GetAccountTransactionsEndpoint",
+        "parameters": [
+          {
+            "name": "applicationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            }
+          },
+          {
+            "name": "accountId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageSlice"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/applications/{applicationId}/registrationUrl": {
+      "get": {
+        "tags": [
+          "Applications"
+        ],
+        "operationId": "GetApplicationRegistrationUrlEndpoint",
+        "parameters": [
+          {
+            "name": "applicationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/api/applications/handleCallbackFlow": {
+      "post": {
+        "tags": [
+          "Applications"
+        ],
+        "operationId": "HandleCallbackFlowDataEndpoint",
+        "requestBody": {
+          "x-name": "HandleCallbackDataRequest",
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HandleCallbackDataRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HandleCallbackDataResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/applications/registerSoftwareStatement": {
+      "patch": {
+        "tags": [
+          "Applications"
+        ],
+        "operationId": "RegisterSoftwareStatementEndpoint",
+        "requestBody": {
+          "x-name": "RegisterSoftwareStatementRequest",
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterSoftwareStatementRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountDirectAccessApplicationManifest"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AccountDirectAccessApplicationManifest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "targetEnvironment",
+          "softwareStatementRegistrationDocument"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "targetEnvironment": {
+            "type": "string"
+          },
+          "softwareStatementRegistrationDocument": {
+            "$ref": "#/components/schemas/SoftwareStatementRequest"
+          },
+          "softwareStatement": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/AccountDirectAccessApplicationManifest_SoftwareStatementRegistrationResult"
+              }
+            ]
+          },
+          "applicationRegistration": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/AccountDirectAccessApplicationManifest_ApplicationRegistrationResult"
+              }
+            ]
+          },
+          "applicationAuthorization": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/AccountDirectAccessApplicationManifest_ApplicationAuthorizationResult"
+              }
+            ]
+          }
+        }
+      },
+      "SoftwareStatementRequest": {
+        "type": "object",
+        "additionalProperties": {},
+        "required": [
+          "softwareName",
+          "softwareId",
+          "softwareVersion",
+          "redirectUris",
+          "registrationBackUri",
+          "contacts",
+          "softwareNameEn",
+          "softwareUri",
+          "tokenEndpointAuthMethod",
+          "grantTypes",
+          "responseTypes",
+          "logoUri",
+          "tosUri",
+          "policyUri"
+        ],
+        "properties": {
+          "softwareName": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 5
+          },
+          "softwareNameEn": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 5
+          },
+          "softwareId": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 0
+          },
+          "softwareVersion": {
+            "type": "string",
+            "maxLength": 30,
+            "minLength": 1
+          },
+          "softwareUri": {
+            "type": "string",
+            "format": "uri"
+          },
+          "redirectUris": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uri"
+            }
+          },
+          "tokenEndpointAuthMethod": {
+            "type": "string"
+          },
+          "grantTypes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "responseTypes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "registrationBackUri": {
+            "type": "string",
+            "format": "uri"
+          },
+          "contacts": {
+            "type": "array",
+            "maxItems": 2,
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            }
+          },
+          "logoUri": {
+            "type": "string",
+            "format": "uri"
+          },
+          "tosUri": {
+            "type": "string",
+            "format": "uri"
+          },
+          "policyUri": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      },
+      "AccountDirectAccessApplicationManifest_SoftwareStatementRegistrationResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "jwt",
+          "validToUtc"
+        ],
+        "properties": {
+          "jwt": {
+            "type": "string"
+          },
+          "validToUtc": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "AccountDirectAccessApplicationManifest_ApplicationRegistrationResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "clientId",
+          "clientSecret"
+        ],
+        "properties": {
+          "clientId": {
+            "type": "string"
+          },
+          "clientSecret": {
+            "type": "string"
+          },
+          "registrationClientUri": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "AccountDirectAccessApplicationManifest_ApplicationAuthorizationResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "refreshToken",
+          "refreshTokenExpirationUtc"
+        ],
+        "properties": {
+          "refreshToken": {
+            "type": "string"
+          },
+          "refreshTokenExpirationUtc": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "SoftwareStatementRegistrationDocumentModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "softwareName",
+          "softwareNameEn",
+          "softwareVersion",
+          "contacts",
+          "softwareUri",
+          "policyUri",
+          "tosUri",
+          "logoUri",
+          "registrationBackUri",
+          "redirectUris",
+          "generateSoftwareId",
+          "softwareId"
+        ],
+        "properties": {
+          "generateSoftwareId": {
+            "type": "boolean"
+          },
+          "softwareName": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0,
+            "nullable": false
+          },
+          "softwareNameEn": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0,
+            "nullable": false
+          },
+          "softwareId": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "softwareVersion": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0,
+            "nullable": false
+          },
+          "contacts": {
+            "type": "array",
+            "minLength": 1,
+            "nullable": false,
+            "items": {
+              "type": "string"
+            }
+          },
+          "softwareUri": {
+            "type": "string",
+            "minLength": 1,
+            "nullable": false
+          },
+          "policyUri": {
+            "type": "string",
+            "minLength": 1,
+            "nullable": false
+          },
+          "tosUri": {
+            "type": "string",
+            "minLength": 1,
+            "nullable": false
+          },
+          "logoUri": {
+            "type": "string",
+            "minLength": 1,
+            "nullable": false
+          },
+          "registrationBackUri": {
+            "type": "string",
+            "minLength": 1,
+            "nullable": false
+          },
+          "redirectUris": {
+            "type": "array",
+            "minLength": 1,
+            "nullable": false,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "description": "the dto used to send an error response to the client",
+        "additionalProperties": false,
+        "required": [
+          "statusCode",
+          "message",
+          "errors"
+        ],
+        "properties": {
+          "statusCode": {
+            "type": "integer",
+            "description": "the http status code sent to the client. default is 400.",
+            "format": "int32",
+            "default": 400
+          },
+          "message": {
+            "type": "string",
+            "description": "the message for the error response",
+            "default": "One or more errors occurred!"
+          },
+          "errors": {
+            "type": "object",
+            "description": "the collection of errors for the current context",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "Account": {
+        "type": "object",
+        "additionalProperties": {},
+        "required": [
+          "accountId",
+          "iban",
+          "currency",
+          "nameI18N",
+          "productI18N"
+        ],
+        "properties": {
+          "accountId": {
+            "type": "string",
+            "maxLength": 400,
+            "minLength": 0
+          },
+          "iban": {
+            "type": "string",
+            "maxLength": 34,
+            "minLength": 0
+          },
+          "currency": {
+            "type": "string",
+            "maxLength": 3,
+            "minLength": 0
+          },
+          "nameI18N": {
+            "type": "string"
+          },
+          "productI18N": {
+            "type": "string"
+          }
+        }
+      },
+      "ApplicationRequestBase": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "PageSlice": {
+        "type": "object",
+        "additionalProperties": {},
+        "required": [
+          "content",
+          "totalPages",
+          "pageNumber",
+          "pageSize",
+          "numberOfElements",
+          "first",
+          "last",
+          "empty"
+        ],
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AccountTransaction"
+            }
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "AccountTransaction": {
+        "type": "object",
+        "additionalProperties": {},
+        "required": [
+          "lastUpdated",
+          "accountType",
+          "iban",
+          "creditDebitIndicator",
+          "transactionType",
+          "amount",
+          "entryReference",
+          "bankTransactionCode",
+          "bookingDate",
+          "valueDate",
+          "instructed",
+          "reversalIndicator",
+          "status",
+          "counterParty",
+          "references",
+          "additionalTransactionInformation",
+          "cardTransactionDetails"
+        ],
+        "properties": {
+          "lastUpdated": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "accountType": {
+            "$ref": "#/components/schemas/AccountType"
+          },
+          "entryReference": {
+            "type": "string"
+          },
+          "iban": {
+            "type": "string",
+            "maxLength": 34,
+            "minLength": 0
+          },
+          "creditDebitIndicator": {
+            "$ref": "#/components/schemas/CreditDebitIndicator"
+          },
+          "transactionType": {
+            "$ref": "#/components/schemas/TransactionType"
+          },
+          "bankTransactionCode": {
+            "$ref": "#/components/schemas/BankTransactionCode"
+          },
+          "amount": {
+            "$ref": "#/components/schemas/CurrencyAmount"
+          },
+          "bookingDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "valueDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "instructed": {
+            "$ref": "#/components/schemas/CurrencyAmount"
+          },
+          "reversalIndicator": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "string"
+          },
+          "counterParty": {
+            "$ref": "#/components/schemas/TransactionCounterparty"
+          },
+          "references": {
+            "$ref": "#/components/schemas/TransactionReferences"
+          },
+          "additionalTransactionInformation": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 0
+          },
+          "cardTransactionDetails": {
+            "$ref": "#/components/schemas/CardTransactionDetails"
+          }
+        }
+      },
+      "AccountType": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": [
+          "KB",
+          "AG"
+        ],
+        "enum": [
+          "KB",
+          "AG"
+        ]
+      },
+      "CreditDebitIndicator": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": [
+          "CREDIT",
+          "DEBIT"
+        ],
+        "enum": [
+          "CREDIT",
+          "DEBIT"
+        ]
+      },
+      "TransactionType": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": [
+          "INTEREST",
+          "FEE",
+          "DOMESTIC",
+          "FOREIGN",
+          "SEPA",
+          "CASH",
+          "CARD",
+          "OTHER"
+        ],
+        "enum": [
+          "INTEREST",
+          "FEE",
+          "DOMESTIC",
+          "FOREIGN",
+          "SEPA",
+          "CASH",
+          "CARD",
+          "OTHER"
+        ]
+      },
+      "BankTransactionCode": {
+        "type": "object",
+        "additionalProperties": {},
+        "required": [
+          "code",
+          "issuer"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "maxLength": 35,
+            "minLength": 0
+          },
+          "issuer": {
+            "$ref": "#/components/schemas/BankTransactionCodeIssuer"
+          }
+        }
+      },
+      "BankTransactionCodeIssuer": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": [
+          "CBA",
+          "OTHER"
+        ],
+        "enum": [
+          "CBA",
+          "OTHER"
+        ]
+      },
+      "CurrencyAmount": {
+        "type": "object",
+        "additionalProperties": {},
+        "required": [
+          "value",
+          "currency"
+        ],
+        "properties": {
+          "value": {
+            "type": "number",
+            "format": "double"
+          },
+          "currency": {
+            "type": "string",
+            "maxLength": 3,
+            "minLength": 0
+          }
+        }
+      },
+      "TransactionCounterparty": {
+        "type": "object",
+        "additionalProperties": {},
+        "required": [
+          "iban",
+          "name",
+          "accountNo",
+          "bankBic",
+          "bankCode",
+          "bankName"
+        ],
+        "properties": {
+          "iban": {
+            "type": "string",
+            "maxLength": 34,
+            "minLength": 0
+          },
+          "name": {
+            "type": "string"
+          },
+          "accountNo": {
+            "type": "string",
+            "maxLength": 34,
+            "minLength": 0
+          },
+          "bankBic": {
+            "type": "string",
+            "maxLength": 11,
+            "minLength": 0
+          },
+          "bankCode": {
+            "type": "string",
+            "maxLength": 4,
+            "minLength": 0
+          },
+          "bankName": {
+            "type": "string"
+          }
+        }
+      },
+      "TransactionReferences": {
+        "type": "object",
+        "additionalProperties": {},
+        "required": [
+          "accountServicer",
+          "endToEndIdentification",
+          "variable",
+          "constant",
+          "specific",
+          "receiver",
+          "myDescription"
+        ],
+        "properties": {
+          "accountServicer": {
+            "type": "string"
+          },
+          "endToEndIdentification": {
+            "type": "string"
+          },
+          "variable": {
+            "type": "string"
+          },
+          "constant": {
+            "type": "string"
+          },
+          "specific": {
+            "type": "string"
+          },
+          "receiver": {
+            "type": "string"
+          },
+          "myDescription": {
+            "type": "string"
+          }
+        }
+      },
+      "CardTransactionDetails": {
+        "type": "object",
+        "additionalProperties": {},
+        "required": [
+          "holdExpirationDate"
+        ],
+        "properties": {
+          "holdExpirationDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "GetAccountTransactionsRequest": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ApplicationRequestBase"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "HandleCallbackDataResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "updatedApplication"
+        ],
+        "properties": {
+          "redirectUri": {
+            "type": "string",
+            "nullable": true
+          },
+          "updatedApplication": {
+            "$ref": "#/components/schemas/AccountDirectAccessApplicationManifest"
+          }
+        }
+      },
+      "HandleCallbackDataRequest": {
+        "type": "object",
+        "additionalProperties": {},
+        "required": [
+          "encryptedData",
+          "salt",
+          "code",
+          "state"
+        ],
+        "properties": {
+          "encryptedData": {
+            "type": "string",
+            "minLength": 1,
+            "nullable": false
+          },
+          "salt": {
+            "type": "string",
+            "minLength": 1,
+            "nullable": false
+          },
+          "code": {
+            "type": "string",
+            "minLength": 1,
+            "nullable": false
+          },
+          "state": {
+            "type": "string",
+            "minLength": 1,
+            "nullable": false
+          }
+        }
+      },
+      "RegisterSoftwareStatementRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "applicationId"
+        ],
+        "properties": {
+          "applicationId": {
+            "type": "string",
+            "format": "guid",
+            "minLength": 1,
+            "nullable": false
+          }
+        }
+      }
+    }
+  }
+}
