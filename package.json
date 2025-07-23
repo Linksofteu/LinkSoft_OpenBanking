@@ -18,7 +18,9 @@
   },
   "keywords": [],
   "scripts": {
-    "preinstall": "npx only-allow pnpm"
+    "preinstall": "npx only-allow pnpm",
+    "prepare": "husky",
+    "commit": "cz"
   },
   "packageManager": "pnpm@10.13.0",
   "config": {
