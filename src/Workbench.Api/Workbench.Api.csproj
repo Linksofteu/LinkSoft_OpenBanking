@@ -26,8 +26,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\LinkSoft.OpenBanking.Komercka.AccountDirectAccess\LinkSoft.OpenBanking.Komercka.AccountDirectAccess.csproj"/>
-        <ProjectReference Include="..\LinkSoft.OpenBanking.Komercka.Client\LinkSoft.OpenBanking.Komercka.Client.csproj"/>
+      <ProjectReference Include="..\lib\LinkSoft.OpenBanking.Komercka.AccountDirectAccess\LinkSoft.OpenBanking.Komercka.AccountDirectAccess.csproj" />
+      <ProjectReference Include="..\lib\LinkSoft.OpenBanking.Komercka.Client\LinkSoft.OpenBanking.Komercka.Client.csproj" />
     </ItemGroup>
 
     <PropertyGroup>

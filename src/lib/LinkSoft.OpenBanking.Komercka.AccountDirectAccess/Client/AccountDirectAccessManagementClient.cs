@@ -98,7 +98,7 @@ public class AccountDirectAccessManagementClient
         }
         catch (AccountDirectAccessApiException<OAuthErrorResponse> errorException)
         {
-            failure = TokenResult.Failure(errorException.Message, errorException.Result.ToString());
+            failure = TokenResult.Failure(errorException.Result.Message ?? errorException.Message, errorException.Result.Description);
         }
         catch (AccountDirectAccessApiException exception)
         {
@@ -179,7 +179,7 @@ public class AccountDirectAccessManagementClient
         }
         catch (AccountDirectAccessApiException<OAuthErrorResponse> errorException)
         {
-            failure = TokenResult.Failure(errorException.Message, errorException.Result.ToString());
+            failure = TokenResult.Failure(errorException.Result.Message ?? errorException.Message, errorException.Result.Description);
         }
         catch (AccountDirectAccessApiException exception)
         {
