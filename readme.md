@@ -1,4 +1,4 @@
-# .NET Integrace na API ADA (Account Direct Access) Komercni banky
+# .NET integration of ADA (Account Direct Access) API [KB.cz](https://www.kb.cz/)
 
 ## Supported runtimes
 
@@ -6,77 +6,66 @@
 
 ## DEV setup
 
-- backend (`Workbench.Api`) je by default nakonfigurovany na praci proti KB Sandboxu (config key
-  `Workbench:TargetEnvironment` - hodnota "Sandbox" nebo "Production")
+- backend (`Workbench.Api`) is by default configured to use KB Sandbox environment (config key
+  `Workbench:TargetEnvironment` - value "Sandbox" or "Production")
 - pred spustenim je treba pro zvolene cilove prostredi nakonfigurovat API keys (ziskate
   v [KB Developer portal](https://developers.kb.cz/) po registraci)
-
-- Sandbox secrets
-    - viz. `Data\set-sandbox-secrets.ps1`
-- Production secrets
-    - viz. `Data\set-production-secrets.ps1`
-    - stejne jako u Sandbox je treba vygenerovat API keys
-    - navic je treba zvolit
-      si [sifrovaci klic](https://github.com/komercka/adaa-client/wiki/03-Application-Registration-OAuth2#application-registration---oauth2)
-      pro registraci aplikace - `ADAA:Production:ApplicationRegistration:EncryptionKey` (32 bytu dlouhy klic zakodovany
-      pomoci Base64)
-        - pro Sandbox je vlozen primo v app config nebot se zde musi pouzit presne predepsana hodnota
-    - pri provozu proti Production je treba mit take nakonfigurovany validni certifikat s privatnim klicem
-      `Workbench:Certificate` a `Workbench:CertificatePassword`
+- before running, you need to configure API keys for the selected target environment (get them using [KB Developer portal](https://developers.kb.cz/) after registration) 
+  - Sandbox secrets
+      - see `scripts\set-sandbox-secrets.ps1`
+  - Production secrets
+      - see `scripts\set-production-secrets.ps1`
+      - as with Sandbox, you need to generate API keys
+      - in addition, you need to choose [encryption key](https://github.com/komercka/adaa-client/wiki/03-Application-Registration-OAuth2#application-registration---oauth2) for application registration 
+        - config key: `ADAA:Production:ApplicationRegistration:EncryptionKey`
+        - 32 byte long Base64 encoded key
+        - for Sandbox it is hardcoded directly in app config (cannot be changed)
+      - when running against Production, a valid certificate with a private key must also be configured (`Workbench:Certificate` and `Workbench:CertificatePassword`)
 
 ## TODO
 
-- je nejaka moznost jak pomoci API zjistit, zda je SoftwareStatement registrace stale platna ?
+- is there any way to check if the SoftwareStatement registration is still valid using the API ?
 
 ## Known issues
 
 - NSwag toolchain vs. deprecated parameters
-    - nektere ADAA parametry (`fromDate`/`toDate` pro endpoint `/accounts/{accountId}/transactions`) jsou oznaceny jako
+    - some ADAA parameters (`fromDate`/`toDate` for endpoint `/accounts/{accountId}/transactions`) are marked as
       deprecated
-    - Pri generovani C# klienta NSwag tyto parametry neignoruje automaticky
-    - workaround je uvest je v nastaveni (.nswag soubor) v "excludedParameterNames"
+    - When generating a C# client, NSwag does not automatically ignore these parameters
+    - workaround is to specify them in the settings (.nswag file) in "excludedParameterNames"
 - application registration flow
-    - Sandbox posila na callback parametry v uvozovkach ("...") - nahlaseno KB a pry opravi
-    - authorization flow na Sandboxu vubec nevraci parametr `state` - take nahlaseno ale berou to jako "suggestion"
-    - oproti tomu, co je popsano v dokumentaci se parametr `state` v ramci registrace aplikace k uctu KB klienta nevraci
-      zpet nezasifrovany v redirect URL ale v ramci zasifrovanych vracenych dat (melo by byt opraveno)
+    - Sandbox sends the parameters in quotes ("...") to the callback - reported by KB and supposedly fixed
+    - authorization flow on Sandbox does not return the `state` parameter at all - also reported but they take it as "suggestion"
+    - in contrast to what is described in the documentation, the `state` parameter in the context of registering the application to the KB client account does not return
+      unencrypted in the redirect URL but in the encrypted returned data (should be fixed)
 
 ## Design decisions
 
-### Generovany klient
+### Generated clients
 
-ADAA klient samotny je generovany z OpenAPI specifikace.
-Nicmene tento klient je samostatne zcela nepouzitelny, protoze ADAA vzdy pracuje v kontextu konkretniho klienta KB.
-Udaje o tomto klientovi nelze do API klienta (respektive konkretnich volani) nijak vlozit.
-Kontext je tvoren z ClientId, ClientSecret a OAuth2 Refresh tokenu.
-Tyto informace jsou ziskany behem procesu registrace aplikace (browser flow kdy klient KB schvali pristup aplikace -
-vznika ClientId a ClientSecret) a autorizace (opet browser flow, kdy klient KB autorizuje aplikaci pro pristup k
-vybranym uctum - zde vznika refresh token).
+There is OpenAPI (swagger) specification for most of the ADAA interfaces. 
+However, not all clients in this solution are generated for the reasons described bellow. 
 
-### Pouziti externi library
+#### ClientRegistration client
 
-Vzhledem k pozadovane funkcionalite byla samozrejme prvni uvaha o pouziti nejake existujici OSS library.
-Vetsina vyhledavani vracela odkazy na [Duende.IdentityModel](https://www.nuget.org/packages/Duende.IdentityModel/)
-a [Duende.AccessTokenManagement](https://www.nuget.org/packages/Duende.AccessTokenManagement).
-Prvni z nich implementuje zakladni infrastrukturu pro praci s OAuth2 a OpenID Connect.
-Druha pak [automatizuje praci s Access tokens](https://docs.duendesoftware.com/accesstokenmanagement/workers/) (
-automaticke pripojeni Access Token k requestu a jeho refresh v pripade, ze se vrati 401)
+Automatic code generation of the ClientRegistration client is not possible right now due to:
 
-#### [Duende.IdentityModel](https://www.nuget.org/packages/Duende.IdentityModel/)
+1. mismatch of OpenAPI spec and actual behavior
+   - code 400 response sometimes does not match OpenAPI spec (different JSON shape returned)
+   - server should return 201 Created, but returns 200 OK (Sandbox only)
+2. NSwag toolchain (C# templates) missing support for enum collections serializable as array of strings
+3. NSwag toolchain (C# templates) not handling well operations returning different content types for different response status codes
 
-- nakonec nemohla byt pouzita jako Nuget, protoze neni k dispozici pro .NET 6.0
-- potrebne casti kodu byly prevzaty z [GitHubu](https://github.com/DuendeSoftware/foss) (commit hash:
-  dcadd315f84c2dee860e7ffd3a728558f292f980) a vznikla tak asssembly LinkSoft.OAuth
-- Struktura projektu a názvy souborů/tříd jsou záměrně zachovány stejné, aby budoucí migrace na balíčky Duende NuGet (v
-  případě potřeby) byla co nejjednodušší
+#### ADAA client
 
-#### [Duende.AccessTokenManagement](https://www.nuget.org/packages/Duende.AccessTokenManagement)
+The ADAA client itself is generated from the OpenAPI specification.
+However, this client is completely unusable on its own, because ADAA always works in the context of a specific KB client.
+Data about this client cannot be inserted into the client API (or specific calls) in any way.
+The context is made of ClientId, ClientSecret and OAuth2 Refresh token.
+This information is obtained during the process of application registration (browser flow, when KB client approves the application access -
+generates ClientId and ClientSecret) and authorization (again browser flow, when KB client authorizes the application to access
+selected objects - here generates refresh token).
 
-- podobne jako predchozi nemohla byt pouzita, protoze potrebujeme podporu pro .NET 6.0
-- navic obsazena funkcionalita neumoznuje implementovat to, co potrebujeme:
-    1. predpoklada ziskavani Access Token za pomoci Client Credentials flow (predani ClientId a ClientSecret) ve kterem
-       vubec nefiguruje RefreshToken (toto nelze zmenit)
-    2. Predpoklada, ze ClientId/ClientSecret pouzite pri refresh jsou konstantni (vazana na konkretni jednu instanci
-       HttpClient)
-        - ADAA ale pouziva jednu sadu ClientId/ClientSecret (a pro ne generovane RefreshToken a nasledne AccessToken)
-          pro kazdy "napojeny" ucet klienta KB
+## Credits
+
+- parts of the code around access token management are heavily inspired by amazing [Duende.AccessTokenManagement](https://www.nuget.org/packages/Duende.AccessTokenManagement).
