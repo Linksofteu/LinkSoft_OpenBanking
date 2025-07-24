@@ -8,7 +8,7 @@ namespace LinkSoft.OpenBanking.Komercka.Client.ClientRegistration;
 /*
  * Automatic code generation of the ClientRegistration client not possible right now due to mismatch of OpenAPI spec and actual behavior.
  * - server should return 201 Created, but returns 200 OK (Sandbox)
- * - code 400 response sometimes nto matched to OpenAPI spec
+ * - code 400 response sometimes not matched to OpenAPI spec
  *  - for example: {"status":"BAD_REQUEST","timestamp":"23-07-2025 07:57:05","message":"Validation failed","errors":["One or more redirectUris are not valid due to not matching a URI pattern."]}
  *
  * If fixed in the future, then code generation can be enabled in csproj and second partial class in this file can be deleted...

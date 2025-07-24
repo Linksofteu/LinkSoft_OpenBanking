@@ -1,4 +1,3 @@
-using LinkSoft.OpenBanking.Komercka.Client.AccountDirectAccess;
 using System.Net.Http.Headers;
 using System.Text.Json;
 
@@ -99,13 +98,13 @@ public class OAuthClient
             }
             else if (status == 400)
             {
-                ObjectResponseResult<ErrorResponse> objectResponse = await ReadObjectResponseAsync<ErrorResponse>(response, headers).ConfigureAwait(false);
+                ObjectResponseResult<OAuthErrorResponse> objectResponse = await ReadObjectResponseAsync<OAuthErrorResponse>(response, headers).ConfigureAwait(false);
                 if (objectResponse.Object == null)
                 {
                     throw new AccountDirectAccessApiException("Response was null which was not expected.", status, objectResponse.Text, headers, null);
                 }
 
-                throw new AccountDirectAccessApiException<ErrorResponse>(
+                throw new AccountDirectAccessApiException<OAuthErrorResponse>(
                     "Invalid request parameter (missing parameter or wrong parameter value). For more details about possible error types, see \'https://tools.ietf.org/html/rfc6749#section-5.2\'",
                     status,
                     objectResponse.Text,

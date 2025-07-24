@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -39,12 +40,13 @@ public class Error
 /// <summary>
 ///     Collection of errors defined by individual elements.
 /// </summary>
+[UsedImplicitly(ImplicitUseTargetFlags.Members)]
 public class ErrorResponse
 {
     private IDictionary<string, object>? _additionalProperties;
 
     [JsonPropertyName("errors")]
-    public ICollection<Error>? Errors { get; set; } = default!;
+    public ICollection<Error>? Errors { get; set; }
 
     [JsonExtensionData]
     public IDictionary<string, object> AdditionalProperties
