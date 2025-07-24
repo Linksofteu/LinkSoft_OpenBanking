@@ -1,0 +1,1 @@
+mkcert -cert-file ..\cert\localhost+1.pem -key-file ..\cert\localhost+1-key.pem localhost 127.0.0.1

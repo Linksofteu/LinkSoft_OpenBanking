@@ -6,9 +6,9 @@ const templateDocument: Omit<SoftwareStatementRegistrationDocumentModel, 'genera
   softwareVersion: '0.1',
   softwareUri: 'https://kacka.example.org',
   redirectUris: [
-    'http://localhost:3000/callback',
+    'https://localhost:3000/callback',
   ],
-  registrationBackUri: 'http://localhost:3000/callback',
+  registrationBackUri: 'https://localhost:3000/callback',
   contacts: [
     'email: michal.sindelar@linksoft.cz',
   ],

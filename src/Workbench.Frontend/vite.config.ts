@@ -1,3 +1,4 @@
+import fs from 'node:fs'
 import path from 'node:path'
 import process from 'node:process'
 import tailwindcss from '@tailwindcss/vite'
@@ -43,6 +44,10 @@ export default defineConfig(({ mode }) => {
       pure: isProd ? ['console.log', 'console.debug'] : [],
     },
     server: {
+      https: {
+        key: fs.readFileSync(path.resolve(__dirname, './cert/localhost+1-key.pem')),
+        cert: fs.readFileSync(path.resolve(__dirname, './cert/localhost+1.pem')),
+      },
       proxy: {
         '/api': {
           target: `${process.env.VITE_APP_API_URL}`,
