@@ -513,24 +513,24 @@
           },
           "softwareName": {
             "type": "string",
-            "maxLength": 100,
+            "maxLength": 50,
             "minLength": 0,
             "nullable": false
           },
           "softwareNameEn": {
             "type": "string",
-            "maxLength": 100,
+            "maxLength": 50,
             "minLength": 0,
             "nullable": false
           },
           "softwareId": {
             "type": "string",
-            "maxLength": 100,
+            "maxLength": 64,
             "minLength": 0
           },
           "softwareVersion": {
             "type": "string",
-            "maxLength": 100,
+            "maxLength": 30,
             "minLength": 0,
             "nullable": false
           },

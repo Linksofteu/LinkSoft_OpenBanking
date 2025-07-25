@@ -19,9 +19,15 @@ public class SoftwareStatementRequest
 {
     private IDictionary<string, object>? _additionalProperties;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="SoftwareStatementRequest" /> class with default values.
+    /// </summary>
+    /// <remarks>
+    ///     Sets some default values required/recommended by KB API documentation.
+    /// </remarks>
     public SoftwareStatementRequest()
     {
-        TokenEndpointAuthMethod = "client_secret_basic";
+        TokenEndpointAuthMethod = "client_secret_post";
         GrantTypes =
         [
             "authorization_code",
@@ -44,7 +50,6 @@ public class SoftwareStatementRequest
     /// <summary>
     ///     Software Name in EN.
     /// </summary>
-
     [JsonPropertyName("softwareNameEn")]
     [StringLength(50, MinimumLength = 5)]
     public string SoftwareNameEn { get; set; } = default!;
@@ -53,7 +58,6 @@ public class SoftwareStatementRequest
     ///     A unique identifier string (e.g., a Universally Unique Identifier (UUID)) assigned by the client developer or software publisher used by registration endpoints to identify the
     ///     client software to be dynamically registered.
     /// </summary>
-
     [JsonPropertyName("softwareId")]
     [Required(AllowEmptyStrings = true)]
     [StringLength(64)]
@@ -63,7 +67,6 @@ public class SoftwareStatementRequest
     ///     A version identifier string for the client software identified by softwareId.  The value of the softwareVersion SHOULD change on any update to the client software identified
     ///     by the same softwareId.
     /// </summary>
-
     [JsonPropertyName("softwareVersion")]
     [Required]
     [StringLength(30, MinimumLength = 1)]
@@ -72,14 +75,12 @@ public class SoftwareStatementRequest
     /// <summary>
     ///     Software URL.
     /// </summary>
-
     [JsonPropertyName("softwareUri")]
     public Uri SoftwareUri { get; set; } = default!;
 
     /// <summary>
     ///     Array of redirection URI strings for use in redirect-based flows such as the authorization code.
     /// </summary>
-
     [JsonPropertyName("redirectUris")]
     [Required]
     public ICollection<Uri> RedirectUris { get; set; } = new Collection<Uri>();
@@ -87,7 +88,6 @@ public class SoftwareStatementRequest
     /// <summary>
     ///     String indicator of the requested authentication method for the token endpoint.
     /// </summary>
-
     [JsonPropertyName("tokenEndpointAuthMethod")]
     public string TokenEndpointAuthMethod { get; set; }
 
@@ -101,14 +101,12 @@ public class SoftwareStatementRequest
     /// <summary>
     ///     Array of the OAuth 2.0 response type strings that the client can use at the authorization endpoint.
     /// </summary>
-
     [JsonPropertyName("responseTypes")]
     public ICollection<string> ResponseTypes { get; set; }
 
     /// <summary>
     ///     URI string representing the endpoint where registration data is sent.
     /// </summary>
-
     [JsonPropertyName("registrationBackUri")]
     [Required(AllowEmptyStrings = true)]
     public Uri RegistrationBackUri { get; set; } = default!;

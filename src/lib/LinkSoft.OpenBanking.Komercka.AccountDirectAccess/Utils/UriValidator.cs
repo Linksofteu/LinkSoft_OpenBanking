@@ -2,8 +2,15 @@
 
 public static class UriValidator
 {
-    public static bool IsValidUri(this string uri)
+    public static bool IsValidUri(this string urlString, bool absolute = true, bool mustBeHttps = false)
     {
-        return Uri.TryCreate(uri, UriKind.Absolute, out Uri? _);
+        if(string.IsNullOrEmpty(urlString)) return false;
+        
+        if (Uri.TryCreate(urlString, absolute ? UriKind.Absolute : UriKind.RelativeOrAbsolute, out Uri? uri))
+        {
+            return !mustBeHttps || uri.Scheme == Uri.UriSchemeHttps;
+        }
+        
+        return false;
     }
 }

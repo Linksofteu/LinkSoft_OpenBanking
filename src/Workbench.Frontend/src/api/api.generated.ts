@@ -111,22 +111,22 @@ export interface SoftwareStatementRegistrationDocumentModel {
   generateSoftwareId: boolean;
   /**
    * @minLength 0
-   * @maxLength 100
+   * @maxLength 50
    */
   softwareName: string;
   /**
    * @minLength 0
-   * @maxLength 100
+   * @maxLength 50
    */
   softwareNameEn: string;
   /**
    * @minLength 0
-   * @maxLength 100
+   * @maxLength 64
    */
   softwareId: string;
   /**
    * @minLength 0
-   * @maxLength 100
+   * @maxLength 30
    */
   softwareVersion: string;
   /** @minLength 1 */
