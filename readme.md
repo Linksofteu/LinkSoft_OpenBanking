@@ -2,7 +2,7 @@
 
 ## Supported runtimes
 
-- .NET 6+
+- .NET 8+
 
 ## DEV setup
 

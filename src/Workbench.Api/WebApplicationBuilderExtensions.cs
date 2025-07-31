@@ -12,7 +12,7 @@ namespace Workbench;
 
 public static class WebApplicationBuilderExtensions
 {
-    public static void ConfigureServices(this IServiceCollection serviceCollection, ConfigurationManager configuration)
+    public static void ConfigureServices(this IServiceCollection serviceCollection, IConfigurationManager configuration)
     {
         serviceCollection.AddSingleton<IApplicationStore, ApplicationsStore>();
 
@@ -46,12 +46,12 @@ public static class WebApplicationBuilderExtensions
 
         serviceCollection.AddSingleton<StateWorkaroundHandler>();
         serviceCollection.AddTransient<AccessTokenRequestDelegatingHandler>();
-        serviceCollection.AddTransient<ITokenRetriever, ApplicationBoundAccessTokenRetriever>();
+        serviceCollection.AddTransient<ITokenRetriever, HybridCacheTokenRetriever>();
 
         if (!string.IsNullOrEmpty(workbenchOptions.Certificate) && !string.IsNullOrEmpty(workbenchOptions.CertificatePassword))
         {
             X509Certificate2 certificate = GetCertificate(workbenchOptions).AugmentCertificateForTlsClientAuth();
-
+            
             // management client needs TLS with client auth
             serviceCollection.AddHttpClient<AccountDirectAccessManagementClient>()
                 .ConfigurePrimaryHttpMessageHandlerForTlsAuth(certificate);
@@ -74,7 +74,7 @@ public static class WebApplicationBuilderExtensions
         }
     }
 
-    private static WorkbenchOptions AddWorkbenchOptions(IServiceCollection serviceCollection, ConfigurationManager configuration)
+    private static WorkbenchOptions AddWorkbenchOptions(IServiceCollection serviceCollection, IConfigurationManager configuration)
     {
         IConfigurationSection configurationSection = configuration.GetSection(WorkbenchOptions.SectionName);
 

@@ -41,11 +41,7 @@ public static class AppRegistrationFlowHelper
         // tag length used by KB
         const int authenticationTagLength = 16;
 
-#if NET8_0_OR_GREATER
-            using AesGcm aesGcm = new(key, authenticationTagLength);
-#else
-        using AesGcm aesGcm = new(key);
-#endif
+        using AesGcm aesGcm = new(key, authenticationTagLength);
 
         byte[] decrypted = new byte[encryptedData.Length - authenticationTagLength];
         aesGcm.Decrypt(nonce, encryptedData[..^authenticationTagLength], encryptedData[^authenticationTagLength..], decrypted);

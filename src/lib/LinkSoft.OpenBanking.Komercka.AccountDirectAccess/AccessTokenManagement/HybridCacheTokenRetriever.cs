@@ -1,27 +1,28 @@
-﻿using LinkSoft.OpenBanking.Komercka.AccountDirectAccess.AccessTokenManagement;
 using LinkSoft.OpenBanking.Komercka.AccountDirectAccess.Client;
 using Microsoft.Extensions.Caching.Hybrid;
+using Microsoft.Extensions.Logging;
 using System.Collections.Concurrent;
 
-namespace Workbench.Domain.ADAA;
+namespace LinkSoft.OpenBanking.Komercka.AccountDirectAccess.AccessTokenManagement;
 
 /// <summary>
-///     Token retriever that uses application manifest data to get refresh token for a given application.
-///     Access tokens are cached using <see cref="HybridCache" />
+///     Token retriever that uses a hybrid cache to store retrieved access tokens.
+///     Access token is actually retrieved from the Account Direct Access Management API only when no token is found in the cache
+///     or when token refresh is forced.
 /// </summary>
 /// <remarks>
-///     <para>
-///         Retrieved tokens are cached for 3 minutes . We don't use expiration information attached to the retrieved token for simplicity.
-///     </para>
+///     To work correctly, this retriever requires that the <see cref="IAccountDirectAccessClientAuthorizationContext"/>
+///     is set on the request (this can be done for example by using <see cref="AccountDirectAccessClientFactory{TContext}" />). 
 /// </remarks>
-public class ApplicationBoundAccessTokenRetriever : ITokenRetriever
+public class HybridCacheTokenRetriever : ITokenRetriever
 {
     // A flag that's written into the Data property of exceptions to distinguish
     // between exceptions that are thrown inside the cache and those that are thrown
     // inside the factory. 
-    private const string ThrownInsideFactoryExceptionKey = "Workbench.Domain.ADAA.ApplicationBoundAccessTokenRetriever.ThrownInside";
+    private const string ThrownInsideFactoryExceptionKey = "HybridCacheTokenRetriever.ThrownInside";
 
-    private const string CacheTag = "Workbench.Domain.ADAA.ApplicationBoundAccessTokenRetriever";
+    private const string CacheTag = "LinkSoft.OpenBanking.Komercka.AccountDirectAccess.AccessTokenManagement.HybridCacheTokenRetriever";
+    
     private readonly HybridCache _cache;
 
     // We're assuming that the cache duration for access tokens will remain (relatively) stable
@@ -29,11 +30,10 @@ public class ApplicationBoundAccessTokenRetriever : ITokenRetriever
     // a specific period. However, after that, we'll use the actual expiration time to set the cache duration.
     private readonly ConcurrentDictionary<string, TimeSpan> _cacheDuration = new();
 
-    private readonly ILogger<ApplicationBoundAccessTokenRetriever> _logger;
+    private readonly ILogger<HybridCacheTokenRetriever> _logger;
     private readonly AccountDirectAccessManagementClient _managementClient;
-
-    public ApplicationBoundAccessTokenRetriever(AccountDirectAccessManagementClient managementClient, HybridCache cache,
-        ILogger<ApplicationBoundAccessTokenRetriever> logger)
+    
+    public HybridCacheTokenRetriever(AccountDirectAccessManagementClient managementClient, HybridCache cache, ILogger<HybridCacheTokenRetriever> logger)
     {
         _managementClient = managementClient;
         _cache = cache;
@@ -45,10 +45,10 @@ public class ApplicationBoundAccessTokenRetriever : ITokenRetriever
     /// </summary>
     public TimeSpan DefaultCacheLifetime { get; set; } = TimeSpan.FromMinutes(3);
 
-    public ICollection<string> CacheTags { get; } = new[]
-    {
+    public ICollection<string> CacheTags { get; } =
+    [
         CacheTag
-    };
+    ];
 
     public async Task<TokenResult<IToken>> GetTokenAsync(HttpRequestMessage request, bool forceTokenRenewal, CancellationToken ct)
     {
@@ -115,13 +115,13 @@ public class ApplicationBoundAccessTokenRetriever : ITokenRetriever
 
     private string GetCacheKey(IAccountDirectAccessClientAuthorizationContext authorizationContext)
     {
-        return $"{nameof(ApplicationBoundAccessTokenRetriever)}_{authorizationContext.ContextId}";
+        return $"{nameof(HybridCacheTokenRetriever)}_{authorizationContext.ContextId}";
     }
 
     private async Task<AccessToken> RequestToken(string cacheKey, IAccountDirectAccessClientAuthorizationContext authorizationContext, CancellationToken ct)
     {
         TokenResult<AccessToken> tokenResult;
-        var authData = authorizationContext.GetAuthorizationData();
+        IAccountDirectAccessClientAuthorizationData authData = authorizationContext.GetAuthorizationData();
 
         try
         {
