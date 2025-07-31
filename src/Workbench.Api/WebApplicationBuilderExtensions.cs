@@ -98,7 +98,7 @@ public static class WebApplicationBuilderExtensions
         {
             throw new InvalidOperationException("Certificate and certificate password are required.");
         }
-
-        return new X509Certificate2(Convert.FromBase64String(options.Certificate), options.CertificatePassword);
+        
+        return X509CertificateLoader.LoadPkcs12(Convert.FromBase64String(options.Certificate), options.CertificatePassword); 
     }
 }
