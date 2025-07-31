@@ -9,9 +9,9 @@ namespace Workbench.Endpoints;
 public class GetAccountsEndpoint : Endpoint<ApplicationRequestBase, ICollection<Account>>
 {
     private readonly IApplicationStore _applicationStore;
-    private readonly AccountDirectAccessApplicationClientFactory _clientFactory;
+    private readonly ApplicationManifestBoundAdaaClientFactory _clientFactory;
 
-    public GetAccountsEndpoint(IApplicationStore applicationStore, AccountDirectAccessApplicationClientFactory clientFactory)
+    public GetAccountsEndpoint(IApplicationStore applicationStore, ApplicationManifestBoundAdaaClientFactory clientFactory)
     {
         _applicationStore = applicationStore;
         _clientFactory = clientFactory;

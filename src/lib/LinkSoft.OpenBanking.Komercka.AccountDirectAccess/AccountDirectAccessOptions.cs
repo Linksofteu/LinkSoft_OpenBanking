@@ -71,7 +71,7 @@ public class AccountDirectAccessOptions
 
         public class ApplicationRegistrationOptionsValidator : IValidateOptions<ApplicationRegistrationOptions>
         {
-            public ValidateOptionsResult Validate(string name, ApplicationRegistrationOptions options)
+            public ValidateOptionsResult Validate(string? name, ApplicationRegistrationOptions options)
             {
                 if (string.IsNullOrEmpty(options.Url))
                 {
@@ -148,7 +148,7 @@ public class AccountDirectAccessOptions
             // ReSharper restore ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
         }
 
-        public bool IsEndpointOptionsValid(string propertyName, EndpointOptions? options, out ValidateOptionsResult result)
+        private bool IsEndpointOptionsValid(string propertyName, EndpointOptions? options, out ValidateOptionsResult result)
         {
             if (options == null)
             {

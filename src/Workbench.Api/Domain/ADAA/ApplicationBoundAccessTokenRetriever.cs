@@ -1,7 +1,6 @@
 ﻿using LinkSoft.OpenBanking.Komercka.AccountDirectAccess.AccessTokenManagement;
 using LinkSoft.OpenBanking.Komercka.AccountDirectAccess.Client;
 using Microsoft.Extensions.Caching.Hybrid;
-using Microsoft.Extensions.Options;
 using System.Collections.Concurrent;
 
 namespace Workbench.Domain.ADAA;
@@ -32,14 +31,12 @@ public class ApplicationBoundAccessTokenRetriever : ITokenRetriever
 
     private readonly ILogger<ApplicationBoundAccessTokenRetriever> _logger;
     private readonly AccountDirectAccessManagementClient _managementClient;
-    private readonly IOptionsSnapshot<WorkbenchOptions> _options;
 
-    public ApplicationBoundAccessTokenRetriever(AccountDirectAccessManagementClient managementClient, HybridCache cache, IOptionsSnapshot<WorkbenchOptions> options,
+    public ApplicationBoundAccessTokenRetriever(AccountDirectAccessManagementClient managementClient, HybridCache cache,
         ILogger<ApplicationBoundAccessTokenRetriever> logger)
     {
         _managementClient = managementClient;
         _cache = cache;
-        _options = options;
         _logger = logger;
     }
 
@@ -124,13 +121,13 @@ public class ApplicationBoundAccessTokenRetriever : ITokenRetriever
     private async Task<AccessToken> RequestToken(string cacheKey, IAccountDirectAccessClientAuthorizationContext authorizationContext, CancellationToken ct)
     {
         TokenResult<AccessToken> tokenResult;
-        (string clientId, string clientSecret, string refreshToken) = authorizationContext.GetAuthorizationContext(authorizationContext.ContextId);
+        var authData = authorizationContext.GetAuthorizationData();
 
         try
         {
             _logger.LogDebug("Getting new ADAA access token for authorization context {ContextId}", authorizationContext.ContextId);
 
-            tokenResult = await _managementClient.RefreshAccessTokenAsync(clientId, clientSecret, refreshToken, _options.Value.CallbackUrl, ct);
+            tokenResult = await _managementClient.RefreshAccessTokenAsync(authData.ClientId, authData.ClientSecret, authData.RefreshToken, authData.RedirectUri, ct);
         }
         catch (Exception ex)
         {

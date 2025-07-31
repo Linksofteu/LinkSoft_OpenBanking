@@ -9,9 +9,9 @@ namespace Workbench.Endpoints;
 public class GetAccountTransactionsEndpoint : Endpoint<GetAccountTransactionsRequest, PageSlice>
 {
     private readonly IApplicationStore _applicationStore;
-    private readonly AccountDirectAccessApplicationClientFactory _clientFactory;
+    private readonly ApplicationManifestBoundAdaaClientFactory _clientFactory;
 
-    public GetAccountTransactionsEndpoint(IApplicationStore applicationStore, AccountDirectAccessApplicationClientFactory clientFactory)
+    public GetAccountTransactionsEndpoint(IApplicationStore applicationStore, ApplicationManifestBoundAdaaClientFactory clientFactory)
     {
         _applicationStore = applicationStore;
         _clientFactory = clientFactory;

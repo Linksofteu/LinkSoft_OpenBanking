@@ -57,7 +57,7 @@ public static class WebApplicationBuilderExtensions
                 .ConfigurePrimaryHttpMessageHandlerForTlsAuth(certificate);
 
             // ADAA client itself needs TLS with client auth + access token
-            serviceCollection.AddHttpClient<AccountDirectAccessApplicationClientFactory>()
+            serviceCollection.AddHttpClient<ApplicationManifestBoundAdaaClientFactory>()
                 .ConfigurePrimaryHttpMessageHandlerForTlsAuth(certificate)
                 .AddHttpMessageHandler<AccessTokenRequestDelegatingHandler>();
         }
@@ -69,7 +69,7 @@ public static class WebApplicationBuilderExtensions
             }
 
             serviceCollection.AddHttpClient<AccountDirectAccessManagementClient>();
-            serviceCollection.AddHttpClient<AccountDirectAccessApplicationClientFactory>()
+            serviceCollection.AddHttpClient<ApplicationManifestBoundAdaaClientFactory>()
                 .AddHttpMessageHandler<AccessTokenRequestDelegatingHandler>();
         }
     }
