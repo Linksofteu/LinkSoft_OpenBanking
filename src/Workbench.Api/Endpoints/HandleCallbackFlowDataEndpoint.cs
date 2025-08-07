@@ -87,17 +87,7 @@ public class HandleCallbackFlowDataEndpoint : Endpoint<HandleCallbackDataRequest
 
             await _applicationStore.SaveApplication(application);
 
-            await SendAsync(
-                new HandleCallbackDataResponse(application)
-                {
-                    RedirectUri = AppRegistrationFlowHelper.GenerateAuthorizationCodeFlowUri(
-                        _adaaOptions.Value.AuthorizationCodeFlowUrl,
-                        clientId,
-                        _options.Value.CallbackUrl,
-                        application.Id.ToString("N")
-                    )
-                }
-            );
+            await SendAsync(new HandleCallbackDataResponse(application));
 
             return;
         }
