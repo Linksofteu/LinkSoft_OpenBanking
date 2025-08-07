@@ -14,7 +14,7 @@ public class OAuthClient
     public OAuthClient(HttpClient httpClient)
     {
         _httpClient = httpClient;
-        _baseUrl = "https://api-gateway.kb.cz/oauth2/v3/access_token/";
+        _baseUrl = "https://api-gateway.kb.cz/oauth2/v3/access_token";
     }
 
     public string ApiKey { get; set; }
@@ -24,11 +24,13 @@ public class OAuthClient
         get => _baseUrl;
         set
         {
-            _baseUrl = value;
-            if (!string.IsNullOrEmpty(_baseUrl) && !_baseUrl.EndsWith("/"))
+            // KB's Token endpoint does not work well with the trailing slash...
+            if (!string.IsNullOrEmpty(value) && value.EndsWith('/'))
             {
-                _baseUrl += '/';
+                value = value[..^1];
             }
+            
+            _baseUrl = value;
         }
     }
 
