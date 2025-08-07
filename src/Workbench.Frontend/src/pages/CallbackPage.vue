@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { ErrorResponse, HandleCallbackDataResponse, HttpResponse } from '@/api'
 import { apiClient } from '@/api'
 import { parseCallbackUri } from '@/lib/callback'
 
@@ -21,8 +22,14 @@ onMounted(async () => {
 
     router.push('/')
   }
-  catch (e) {
-    error.value = (e as Error)?.message
+  catch (e: unknown) {
+    const httpResponseError = e as HttpResponse<HandleCallbackDataResponse, ErrorResponse>
+    if (httpResponseError.error) {
+      error.value = JSON.stringify(httpResponseError.error, null, 4)
+    }
+    else {
+      error.value = (e as Error)?.message
+    }
   }
   finally {
     isProcessing.value = false
@@ -34,10 +41,8 @@ onMounted(async () => {
   <div v-if="isProcessing" class="w-full">
     <Spinner class="mx-auto" />
   </div>
-  <div v-else-if="error">
-    <div class="text-2xl font-bold text-red-600 mx-auto">
-      Error: {{ error }}
-    </div>
+  <div v-if="error" class="w-xl m-10">
+    <pre class="text-2xl font-bold text-red-600">{{ error }}</pre>
     <Button variant="outline" @click="$router.push('/')">
       Back
     </Button>

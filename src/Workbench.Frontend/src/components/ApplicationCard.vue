@@ -35,6 +35,16 @@ function handleAppRegistration() {
     })
 }
 
+function handleAppAuthorization() {
+  apiClient.api.getApplicationAuthorizationUrlEndpoint(props.appManifest.id!)
+    .then((response) => {
+      window.location.href = response.data
+    })
+    .catch((e) => {
+      console.log(e)
+    })
+}
+
 function getYesNo(condition: boolean) {
   return condition ? 'Yes' : 'No'
 }
@@ -51,12 +61,12 @@ function getYesNo(condition: boolean) {
       <div>SoftwareStatement registered: <b>{{ getYesNo(!!props.appManifest.softwareStatement) }}</b> </div>
       <div>App registered to client account: <b>{{ getYesNo(!!props.appManifest.applicationRegistration) }}</b></div>
       <div>
-        App authorized to access client account: <b>{{ props.appManifest.applicationAuthorization ? new
+        App authorized to access client account (until): <b>{{ props.appManifest.applicationAuthorization ? new
           Date(props.appManifest.applicationAuthorization.refreshTokenExpirationUtc).toLocaleDateString() : 'No' }}</b>
       </div>
     </CardContent>
 
-    <CardFooter class="gap-2">
+    <CardFooter class="gap-2 flex-wrap">
       <Button
         v-if="props.appManifest.softwareStatementRegistrationDocument"
         :variant="props.appManifest.softwareStatementRegistrationDocument ? 'destructive' : 'default'"
@@ -66,10 +76,15 @@ function getYesNo(condition: boolean) {
       </Button>
       <Button
         v-if="props.appManifest.softwareStatement"
-        :variant="props.appManifest.softwareStatement ? 'destructive' : 'default'"
-        @click="handleAppRegistration"
+        :variant="props.appManifest.applicationRegistration ? 'destructive' : 'default'" @click="handleAppRegistration"
       >
         Register to client account
+      </Button>
+      <Button
+        v-if="props.appManifest.applicationRegistration"
+        :variant="props.appManifest.applicationAuthorization ? 'destructive' : 'default'" @click="handleAppAuthorization"
+      >
+        Authorize account access
       </Button>
       <Button
         v-if="props.appManifest.applicationAuthorization"

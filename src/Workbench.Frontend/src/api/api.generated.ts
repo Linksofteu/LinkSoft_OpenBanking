@@ -661,6 +661,27 @@ export class Api<
      * No description
      *
      * @tags Applications
+     * @name GetApplicationAuthorizationUrlEndpoint
+     * @request GET:/api/applications/{applicationId}/authorizationUrl
+     * @response `200` `string` Success
+     * @response `400` `void` Bad Request
+     * @response `404` `void` Not Found
+     */
+    getApplicationAuthorizationUrlEndpoint: (
+      applicationId: string,
+      params: RequestParams = {},
+    ) =>
+      this.request<string, void>({
+        path: `/api/applications/${applicationId}/authorizationUrl`,
+        method: "GET",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Applications
      * @name GetApplicationRegistrationUrlEndpoint
      * @request GET:/api/applications/{applicationId}/registrationUrl
      * @response `200` `string` Success
