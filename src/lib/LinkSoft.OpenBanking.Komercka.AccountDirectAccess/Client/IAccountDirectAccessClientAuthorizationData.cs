@@ -5,7 +5,7 @@ namespace LinkSoft.OpenBanking.Komercka.AccountDirectAccess.Client;
 /// </summary>
 /// <remarks>
 ///     ADAA API always operates in the context of specific KB client account - or more precisely, authorization to specific client and selected accounts.
-///     This interface represents authorization data generated during app registration and authorization process and used by the token management infrastructure.
+///     This interface represents authorization data generated during app registration and authorization process and is used by the token management infrastructure.
 /// </remarks>
 public interface IAccountDirectAccessClientAuthorizationData
 {

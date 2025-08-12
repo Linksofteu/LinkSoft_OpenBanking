@@ -5,17 +5,40 @@
         <LangVersion>13</LangVersion>
         <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
         <IncludeSymbols>true</IncludeSymbols>
-        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <DebugSymbols>true</DebugSymbols>
     </PropertyGroup>
     <PropertyGroup>
         <Company>Linksoft a.s.</Company>
         <Copyright>Copyright © Linksoft a.s., 2025</Copyright>
+        <Authors>Linksoft Technologies a.s.</Authors>
         <Description>.NET integration of ADA (Account Direct Access) API (KB.cz)</Description>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageIcon>logo-linksoft.png</PackageIcon>
+        <PackageReadmeFile>readme.md</PackageReadmeFile>
         <PackageProjectUrl>https://github.com/Linksofteu/LinkSoft_OpenBanking</PackageProjectUrl>
         <RepositoryType>git</RepositoryType>
         <RepositoryUrl>https://github.com/Linksofteu/LinkSoft_OpenBanking</RepositoryUrl>
-        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <RepositoryBranch>main</RepositoryBranch>
+        <Version>1.0.0</Version>
+        <!-- Enable NuGet package auditing -->
+        <NuGetAudit>true</NuGetAudit>
+        <!-- Audit direct and transitive packages -->
+        <NuGetAuditMode>all</NuGetAuditMode>
+        <!-- Report low, moderate, high and critical advisories -->
+        <NuGetAuditLevel>low</NuGetAuditLevel>
     </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+        <Deterministic>true</Deterministic>
+        <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <EnableSourceLink>true</EnableSourceLink>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="../logo-linksoft.png" Pack="true" PackagePath="\"/>
+        <None Include="../../../readme.md" Pack="true" PackagePath="\"/>
+    </ItemGroup>
 </Project>
