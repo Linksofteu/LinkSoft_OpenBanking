@@ -130,11 +130,11 @@ namespace LinkSoft.OpenBanking.Komercka.Client.AccountDirectAccess
                     urlBuilder_.Append('?');
                     if (toDateTime != null)
                     {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("toDateTime")).Append('=').Append(System.Uri.EscapeDataString(toDateTime.Value.ToString("s", System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                        urlBuilder_.Append(System.Uri.EscapeDataString("toDateTime")).Append('=').Append(System.Uri.EscapeDataString(toDateTime.Value.ToString("yyyy-MM-ddTHH:mm:ss.ff'Z'", System.Globalization.CultureInfo.InvariantCulture))).Append('&');
                     }
                     if (fromDateTime != null)
                     {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("fromDateTime")).Append('=').Append(System.Uri.EscapeDataString(fromDateTime.Value.ToString("s", System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                        urlBuilder_.Append(System.Uri.EscapeDataString("fromDateTime")).Append('=').Append(System.Uri.EscapeDataString(fromDateTime.Value.ToString("yyyy-MM-ddTHH:mm:ss.ff'Z'", System.Globalization.CultureInfo.InvariantCulture))).Append('&');
                     }
                     urlBuilder_.Append(System.Uri.EscapeDataString("page")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
                     if (size != null)
@@ -903,7 +903,7 @@ namespace LinkSoft.OpenBanking.Komercka.Client.AccountDirectAccess
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(accountId, System.Globalization.CultureInfo.InvariantCulture)));
                     urlBuilder_.Append("/statements");
                     urlBuilder_.Append('?');
-                    urlBuilder_.Append(System.Uri.EscapeDataString("dateFrom")).Append('=').Append(System.Uri.EscapeDataString(dateFrom.ToString("s", System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    urlBuilder_.Append(System.Uri.EscapeDataString("dateFrom")).Append('=').Append(System.Uri.EscapeDataString(dateFrom.ToString("yyyy-MM-ddTHH:mm:ss.ff'Z'", System.Globalization.CultureInfo.InvariantCulture))).Append('&');
                     urlBuilder_.Length--;
 
                     await PrepareRequestAsync(client_, request_, urlBuilder_, cancellationToken).ConfigureAwait(false);
