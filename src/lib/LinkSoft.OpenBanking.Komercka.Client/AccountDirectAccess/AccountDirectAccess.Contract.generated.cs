@@ -255,10 +255,10 @@ namespace LinkSoft.OpenBanking.Komercka.Client.AccountDirectAccess
         public string Currency { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("nameI18N")]
-        public string NameI18N { get; set; } = default!;
+        public string? NameI18N { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("productI18N")]
-        public string ProductI18N { get; set; } = default!;
+        public string? ProductI18N { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -332,7 +332,7 @@ namespace LinkSoft.OpenBanking.Komercka.Client.AccountDirectAccess
         public SubscriptionInfoStatus Status { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("statusNarrative")]
-        public string StatusNarrative { get; set; } = default!;
+        public string? StatusNarrative { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -510,49 +510,49 @@ namespace LinkSoft.OpenBanking.Komercka.Client.AccountDirectAccess
         /// </summary>
 
         [System.Text.Json.Serialization.JsonPropertyName("accountServicer")]
-        public string AccountServicer { get; set; } = default!;
+        public string? AccountServicer { get; set; } = default!;
 
         /// <summary>
         /// Unique identification of the payment/transaction provided by the client who initiated the payment
         /// </summary>
 
         [System.Text.Json.Serialization.JsonPropertyName("endToEndIdentification")]
-        public string EndToEndIdentification { get; set; } = default!;
+        public string? EndToEndIdentification { get; set; } = default!;
 
         /// <summary>
         /// Variable symbol
         /// </summary>
 
         [System.Text.Json.Serialization.JsonPropertyName("variable")]
-        public string Variable { get; set; } = default!;
+        public string? Variable { get; set; } = default!;
 
         /// <summary>
         /// Constant symbol
         /// </summary>
 
         [System.Text.Json.Serialization.JsonPropertyName("constant")]
-        public string Constant { get; set; } = default!;
+        public string? Constant { get; set; } = default!;
 
         /// <summary>
         /// Specific symbol
         /// </summary>
 
         [System.Text.Json.Serialization.JsonPropertyName("specific")]
-        public string Specific { get; set; } = default!;
+        public string? Specific { get; set; } = default!;
 
         /// <summary>
         /// Message to a payee / reference to receiver.
         /// </summary>
 
         [System.Text.Json.Serialization.JsonPropertyName("receiver")]
-        public string Receiver { get; set; } = default!;
+        public string? Receiver { get; set; } = default!;
 
         /// <summary>
         /// Description for me
         /// </summary>
 
         [System.Text.Json.Serialization.JsonPropertyName("myDescription")]
-        public string MyDescription { get; set; } = default!;
+        public string? MyDescription { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -604,7 +604,7 @@ namespace LinkSoft.OpenBanking.Komercka.Client.AccountDirectAccess
         public AccountType AccountType { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("entryReference")]
-        public string EntryReference { get; set; } = default!;
+        public string? EntryReference { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("iban")]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
@@ -622,7 +622,7 @@ namespace LinkSoft.OpenBanking.Komercka.Client.AccountDirectAccess
         public TransactionType TransactionType { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("bankTransactionCode")]
-        public BankTransactionCode BankTransactionCode { get; set; } = default!;
+        public BankTransactionCode? BankTransactionCode { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("amount")]
         [System.ComponentModel.DataAnnotations.Required]
@@ -634,7 +634,7 @@ namespace LinkSoft.OpenBanking.Komercka.Client.AccountDirectAccess
 
         [System.Text.Json.Serialization.JsonPropertyName("bookingDate")]
         [System.Text.Json.Serialization.JsonConverter(typeof(DateFormatConverter))]
-        public System.DateTimeOffset BookingDate { get; set; } = default!;
+        public System.DateTimeOffset? BookingDate { get; set; } = default!;
 
         /// <summary>
         /// The payment due date in ISODate format (''YYYY-MM-DD'').
@@ -642,26 +642,26 @@ namespace LinkSoft.OpenBanking.Komercka.Client.AccountDirectAccess
 
         [System.Text.Json.Serialization.JsonPropertyName("valueDate")]
         [System.Text.Json.Serialization.JsonConverter(typeof(DateFormatConverter))]
-        public System.DateTimeOffset ValueDate { get; set; } = default!;
+        public System.DateTimeOffset? ValueDate { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("instructed")]
-        public CurrencyAmount Instructed { get; set; } = default!;
+        public CurrencyAmount? Instructed { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("reversalIndicator")]
-        public bool ReversalIndicator { get; set; } = default!;
+        public bool? ReversalIndicator { get; set; } = default!;
 
         /// <summary>
         /// Status of the payment on account from bank point of view.
         /// </summary>
 
         [System.Text.Json.Serialization.JsonPropertyName("status")]
-        public string Status { get; set; } = default!;
+        public string? Status { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("counterParty")]
-        public TransactionCounterparty CounterParty { get; set; } = default!;
+        public TransactionCounterparty? CounterParty { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("references")]
-        public TransactionReferences References { get; set; } = default!;
+        public TransactionReferences? References { get; set; } = default!;
 
         /// <summary>
         /// Additional information about transaction provided by bank
@@ -669,10 +669,10 @@ namespace LinkSoft.OpenBanking.Komercka.Client.AccountDirectAccess
 
         [System.Text.Json.Serialization.JsonPropertyName("additionalTransactionInformation")]
         [System.ComponentModel.DataAnnotations.StringLength(500)]
-        public string AdditionalTransactionInformation { get; set; } = default!;
+        public string? AdditionalTransactionInformation { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("cardTransactionDetails")]
-        public CardTransactionDetails CardTransactionDetails { get; set; } = default!;
+        public CardTransactionDetails? CardTransactionDetails { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -694,33 +694,33 @@ namespace LinkSoft.OpenBanking.Komercka.Client.AccountDirectAccess
 
         [System.Text.Json.Serialization.JsonPropertyName("iban")]
         [System.ComponentModel.DataAnnotations.StringLength(34)]
-        public string Iban { get; set; } = default!;
+        public string? Iban { get; set; } = default!;
 
         /// <summary>
         /// Name of the counterparty
         /// </summary>
 
         [System.Text.Json.Serialization.JsonPropertyName("name")]
-        public string Name { get; set; } = default!;
+        public string? Name { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("accountNo")]
         [System.ComponentModel.DataAnnotations.StringLength(34)]
-        public string AccountNo { get; set; } = default!;
+        public string? AccountNo { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("bankBic")]
         [System.ComponentModel.DataAnnotations.StringLength(11)]
-        public string BankBic { get; set; } = default!;
+        public string? BankBic { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("bankCode")]
         [System.ComponentModel.DataAnnotations.StringLength(4)]
-        public string BankCode { get; set; } = default!;
+        public string? BankCode { get; set; } = default!;
 
         /// <summary>
         /// Counterparty account servicing institution name.
         /// </summary>
 
         [System.Text.Json.Serialization.JsonPropertyName("bankName")]
-        public string BankName { get; set; } = default!;
+        public string? BankName { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -774,11 +774,11 @@ namespace LinkSoft.OpenBanking.Komercka.Client.AccountDirectAccess
         /// </summary>
 
         [System.Text.Json.Serialization.JsonPropertyName("value")]
-        public double Value { get; set; } = default!;
+        public double? Value { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("currency")]
         [System.ComponentModel.DataAnnotations.StringLength(3)]
-        public string Currency { get; set; } = default!;
+        public string? Currency { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -848,7 +848,7 @@ namespace LinkSoft.OpenBanking.Komercka.Client.AccountDirectAccess
         public System.DateTimeOffset ValidAt { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("creditLine")]
-        public CreditLine CreditLine { get; set; } = default!;
+        public CreditLine? CreditLine { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -873,11 +873,11 @@ namespace LinkSoft.OpenBanking.Komercka.Client.AccountDirectAccess
 
         [System.Text.Json.Serialization.JsonPropertyName("code")]
         [System.ComponentModel.DataAnnotations.StringLength(35)]
-        public string Code { get; set; } = default!;
+        public string? Code { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("issuer")]
         [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter))]
-        public BankTransactionCodeIssuer Issuer { get; set; } = default!;
+        public BankTransactionCodeIssuer? Issuer { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -920,7 +920,7 @@ namespace LinkSoft.OpenBanking.Komercka.Client.AccountDirectAccess
 
         [System.Text.Json.Serialization.JsonPropertyName("holdExpirationDate")]
         [System.Text.Json.Serialization.JsonConverter(typeof(DateFormatConverter))]
-        public System.DateTimeOffset HoldExpirationDate { get; set; } = default!;
+        public System.DateTimeOffset? HoldExpirationDate { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -966,14 +966,14 @@ namespace LinkSoft.OpenBanking.Komercka.Client.AccountDirectAccess
         /// </summary>
 
         [System.Text.Json.Serialization.JsonPropertyName("code")]
-        public string Code { get; set; } = default!;
+        public string? Code { get; set; } = default!;
 
         /// <summary>
         /// Optional information about error. Contains additional information specific to a particular error.
         /// </summary>
 
         [System.Text.Json.Serialization.JsonPropertyName("additionalInfo")]
-        public AdditionalInfo AdditionalInfo { get; set; } = default!;
+        public AdditionalInfo? AdditionalInfo { get; set; } = default!;
 
         /// <summary>
         /// Text description of the error. It is not meant to be interpreted to the end user but to enrich the error log.
@@ -1032,14 +1032,14 @@ namespace LinkSoft.OpenBanking.Komercka.Client.AccountDirectAccess
         /// </summary>
 
         [System.Text.Json.Serialization.JsonPropertyName("parameterName")]
-        public string ParameterName { get; set; } = default!;
+        public string? ParameterName { get; set; } = default!;
 
         /// <summary>
         /// Rejected value of the parameter
         /// </summary>
 
         [System.Text.Json.Serialization.JsonPropertyName("rejectedValue")]
-        public string RejectedValue { get; set; } = default!;
+        public string? RejectedValue { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 

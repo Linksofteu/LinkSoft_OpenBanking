@@ -653,9 +653,7 @@
         "required": [
           "accountId",
           "iban",
-          "currency",
-          "nameI18N",
-          "productI18N"
+          "currency"
         ],
         "properties": {
           "accountId": {
@@ -674,10 +672,12 @@
             "minLength": 0
           },
           "nameI18N": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "productI18N": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           }
         }
       },
@@ -741,18 +741,7 @@
           "iban",
           "creditDebitIndicator",
           "transactionType",
-          "amount",
-          "entryReference",
-          "bankTransactionCode",
-          "bookingDate",
-          "valueDate",
-          "instructed",
-          "reversalIndicator",
-          "status",
-          "counterParty",
-          "references",
-          "additionalTransactionInformation",
-          "cardTransactionDetails"
+          "amount"
         ],
         "properties": {
           "lastUpdated": {
@@ -763,7 +752,8 @@
             "$ref": "#/components/schemas/AccountType"
           },
           "entryReference": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "iban": {
             "type": "string",
@@ -777,41 +767,71 @@
             "$ref": "#/components/schemas/TransactionType"
           },
           "bankTransactionCode": {
-            "$ref": "#/components/schemas/BankTransactionCode"
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/BankTransactionCode"
+              }
+            ]
           },
           "amount": {
             "$ref": "#/components/schemas/CurrencyAmount"
           },
           "bookingDate": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "nullable": true
           },
           "valueDate": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "nullable": true
           },
           "instructed": {
-            "$ref": "#/components/schemas/CurrencyAmount"
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/CurrencyAmount"
+              }
+            ]
           },
           "reversalIndicator": {
-            "type": "boolean"
+            "type": "boolean",
+            "nullable": true
           },
           "status": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "counterParty": {
-            "$ref": "#/components/schemas/TransactionCounterparty"
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TransactionCounterparty"
+              }
+            ]
           },
           "references": {
-            "$ref": "#/components/schemas/TransactionReferences"
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TransactionReferences"
+              }
+            ]
           },
           "additionalTransactionInformation": {
             "type": "string",
             "maxLength": 500,
-            "minLength": 0
+            "minLength": 0,
+            "nullable": true
           },
           "cardTransactionDetails": {
-            "$ref": "#/components/schemas/CardTransactionDetails"
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/CardTransactionDetails"
+              }
+            ]
           }
         }
       },
@@ -866,18 +886,20 @@
       "BankTransactionCode": {
         "type": "object",
         "additionalProperties": {},
-        "required": [
-          "code",
-          "issuer"
-        ],
         "properties": {
           "code": {
             "type": "string",
             "maxLength": 35,
-            "minLength": 0
+            "minLength": 0,
+            "nullable": true
           },
           "issuer": {
-            "$ref": "#/components/schemas/BankTransactionCodeIssuer"
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/BankTransactionCodeIssuer"
+              }
+            ]
           }
         }
       },
@@ -896,108 +918,100 @@
       "CurrencyAmount": {
         "type": "object",
         "additionalProperties": {},
-        "required": [
-          "value",
-          "currency"
-        ],
         "properties": {
           "value": {
             "type": "number",
-            "format": "double"
+            "format": "double",
+            "nullable": true
           },
           "currency": {
             "type": "string",
             "maxLength": 3,
-            "minLength": 0
+            "minLength": 0,
+            "nullable": true
           }
         }
       },
       "TransactionCounterparty": {
         "type": "object",
         "additionalProperties": {},
-        "required": [
-          "iban",
-          "name",
-          "accountNo",
-          "bankBic",
-          "bankCode",
-          "bankName"
-        ],
         "properties": {
           "iban": {
             "type": "string",
             "maxLength": 34,
-            "minLength": 0
+            "minLength": 0,
+            "nullable": true
           },
           "name": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "accountNo": {
             "type": "string",
             "maxLength": 34,
-            "minLength": 0
+            "minLength": 0,
+            "nullable": true
           },
           "bankBic": {
             "type": "string",
             "maxLength": 11,
-            "minLength": 0
+            "minLength": 0,
+            "nullable": true
           },
           "bankCode": {
             "type": "string",
             "maxLength": 4,
-            "minLength": 0
+            "minLength": 0,
+            "nullable": true
           },
           "bankName": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           }
         }
       },
       "TransactionReferences": {
         "type": "object",
         "additionalProperties": {},
-        "required": [
-          "accountServicer",
-          "endToEndIdentification",
-          "variable",
-          "constant",
-          "specific",
-          "receiver",
-          "myDescription"
-        ],
         "properties": {
           "accountServicer": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "endToEndIdentification": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "variable": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "constant": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "specific": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "receiver": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "myDescription": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           }
         }
       },
       "CardTransactionDetails": {
         "type": "object",
         "additionalProperties": {},
-        "required": [
-          "holdExpirationDate"
-        ],
         "properties": {
           "holdExpirationDate": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "nullable": true
           }
         }
       },

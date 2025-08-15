@@ -178,8 +178,8 @@ export interface Account {
    * @maxLength 3
    */
   currency: string;
-  nameI18N: string;
-  productI18N: string;
+  nameI18N?: string | null;
+  productI18N?: string | null;
   [key: string]: any;
 }
 
@@ -205,7 +205,7 @@ export interface AccountTransaction {
   /** @format date-time */
   lastUpdated: string;
   accountType: AccountType;
-  entryReference: string;
+  entryReference?: string | null;
   /**
    * @minLength 0
    * @maxLength 34
@@ -213,23 +213,23 @@ export interface AccountTransaction {
   iban: string;
   creditDebitIndicator: CreditDebitIndicator;
   transactionType: TransactionType;
-  bankTransactionCode: BankTransactionCode;
+  bankTransactionCode?: BankTransactionCode | null;
   amount: CurrencyAmount;
   /** @format date-time */
-  bookingDate: string;
+  bookingDate?: string | null;
   /** @format date-time */
-  valueDate: string;
-  instructed: CurrencyAmount;
-  reversalIndicator: boolean;
-  status: string;
-  counterParty: TransactionCounterparty;
-  references: TransactionReferences;
+  valueDate?: string | null;
+  instructed?: CurrencyAmount | null;
+  reversalIndicator?: boolean | null;
+  status?: string | null;
+  counterParty?: TransactionCounterparty | null;
+  references?: TransactionReferences | null;
   /**
    * @minLength 0
    * @maxLength 500
    */
-  additionalTransactionInformation: string;
-  cardTransactionDetails: CardTransactionDetails;
+  additionalTransactionInformation?: string | null;
+  cardTransactionDetails?: CardTransactionDetails | null;
   [key: string]: any;
 }
 
@@ -238,19 +238,19 @@ export interface BankTransactionCode {
    * @minLength 0
    * @maxLength 35
    */
-  code: string;
-  issuer: BankTransactionCodeIssuer;
+  code?: string | null;
+  issuer?: BankTransactionCodeIssuer | null;
   [key: string]: any;
 }
 
 export interface CurrencyAmount {
   /** @format double */
-  value: number;
+  value?: number | null;
   /**
    * @minLength 0
    * @maxLength 3
    */
-  currency: string;
+  currency?: string | null;
   [key: string]: any;
 }
 
@@ -259,41 +259,41 @@ export interface TransactionCounterparty {
    * @minLength 0
    * @maxLength 34
    */
-  iban: string;
-  name: string;
+  iban?: string | null;
+  name?: string | null;
   /**
    * @minLength 0
    * @maxLength 34
    */
-  accountNo: string;
+  accountNo?: string | null;
   /**
    * @minLength 0
    * @maxLength 11
    */
-  bankBic: string;
+  bankBic?: string | null;
   /**
    * @minLength 0
    * @maxLength 4
    */
-  bankCode: string;
-  bankName: string;
+  bankCode?: string | null;
+  bankName?: string | null;
   [key: string]: any;
 }
 
 export interface TransactionReferences {
-  accountServicer: string;
-  endToEndIdentification: string;
-  variable: string;
-  constant: string;
-  specific: string;
-  receiver: string;
-  myDescription: string;
+  accountServicer?: string | null;
+  endToEndIdentification?: string | null;
+  variable?: string | null;
+  constant?: string | null;
+  specific?: string | null;
+  receiver?: string | null;
+  myDescription?: string | null;
   [key: string]: any;
 }
 
 export interface CardTransactionDetails {
   /** @format date-time */
-  holdExpirationDate: string;
+  holdExpirationDate?: string | null;
   [key: string]: any;
 }
 
