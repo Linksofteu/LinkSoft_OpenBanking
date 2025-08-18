@@ -1,4 +1,4 @@
-name: Publish NuGet Package
+name: Publish NuGet Packages
 
 on:
   push:
@@ -7,7 +7,8 @@ on:
 
 env:
   DOTNET_VERSION: '9.0'
-  PROJECT_PATH: 'src/LinkSoft.ResourceGenerator/ResourceGenerator.csproj'
+  LIB_PATH: 'src/lib'
+  NUGET_OUTPUT_DIR: 'nuget_packages'
 
 # Explicitly declare permissions
 permissions:
@@ -31,19 +32,48 @@ jobs:
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
 
-    - name: Update version in csproj 🔄
-      run: sed -i "s/<Version>.*<\/Version>/<Version>${{ steps.extract_version.outputs.version }}<\/Version>/" ${{ env.PROJECT_PATH }}
+    - name: Find all project files 🔍
+      id: find_projects
+      run: |
+        projects=$(find ${{ env.LIB_PATH }} -name "*.csproj" -type f)
+        echo "Found projects:"
+        echo "$projects"
+        echo "projects<<EOF" >> $GITHUB_OUTPUT
+        echo "$projects" >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+
+    - name: Update version in Directory.Build.props 🔄
+      run: |
+        sed -i "s/<Version>.*<\/Version>/<Version>${{ steps.extract_version.outputs.version }}<\/Version>/" ${{ env.LIB_PATH }}/Directory.Build.props
 
     - name: Restore dependencies 🔧
-      run: dotnet restore
+      run: dotnet restore ${{ env.LIB_PATH }}
 
-    - name: Build and pack 📦
-      run: dotnet pack ${{ env.PROJECT_PATH }} --configuration Release --output nuget_packages
+    - name: Build all projects 🔨
+      run: dotnet build ${{ env.LIB_PATH }} --configuration Release --no-restore
+
+    - name: Create NuGet output directory �
+      run: mkdir -p ${{ env.NUGET_OUTPUT_DIR }}
+
+    - name: Pack all projects 📦
+      run: |
+        echo "Packing all projects in ${{ env.LIB_PATH }}..."
+        find ${{ env.LIB_PATH }} -name "*.csproj" -type f | while read project; do
+          echo "Packing: $project"
+          dotnet pack "$project" --configuration Release --no-build --output ${{ env.NUGET_OUTPUT_DIR }}
+        done
+
+    - name: List generated packages 📋
+      run: |
+        echo "Generated NuGet packages:"
+        ls -la ${{ env.NUGET_OUTPUT_DIR }}/*.nupkg
 
     - name: Publish to NuGet 🚀
       env:
         NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
-      run: dotnet nuget push "nuget_packages/*.nupkg" --api-key $NUGET_API_KEY --source https://api.nuget.org/v3/index.json
+      run: |
+        echo "Publishing packages to NuGet..."
+        dotnet nuget push "${{ env.NUGET_OUTPUT_DIR }}/*.nupkg" --api-key $NUGET_API_KEY --source https://api.nuget.org/v3/index.json --skip-duplicate
 
     - name: Create branch and pull request 📂
       env:
@@ -52,7 +82,7 @@ jobs:
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         git checkout -b "release-v${{ steps.extract_version.outputs.version }}"
-        git add ${{ env.PROJECT_PATH }}
+        git add ${{ env.LIB_PATH }}/Directory.Build.props
         git commit -m "Update version to ${{ steps.extract_version.outputs.version }}"
         git push origin "release-v${{ steps.extract_version.outputs.version }}"
-        gh pr create --title "Release v${{ steps.extract_version.outputs.version }}" --body "This PR updates the version to v${{ steps.extract_version.outputs.version }}" --base main --head "release-v${{ steps.extract_version.outputs.version }}"
+        gh pr create --title "Release v${{ steps.extract_version.outputs.version }}" --body "This PR updates the version to v${{ steps.extract_version.outputs.version }} for all library packages" --base main --head "release-v${{ steps.extract_version.outputs.version }}"
