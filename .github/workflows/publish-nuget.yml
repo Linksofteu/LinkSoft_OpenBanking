@@ -35,30 +35,35 @@ jobs:
     - name: Find all project files 🔍
       id: find_projects
       run: |
-        projects=$(find ${{ env.LIB_PATH }} -name "*.csproj" -type f)
-        echo "Found projects:"
-        echo "$projects"
-        echo "projects<<EOF" >> $GITHUB_OUTPUT
-        echo "$projects" >> $GITHUB_OUTPUT
-        echo "EOF" >> $GITHUB_OUTPUT
+        projects=$(find ${{ env.LIB_PATH }} -name "*.csproj" -type f | tr '\n' ' ')
+        echo "Found projects: $projects"
+        echo "projects=$projects" >> $GITHUB_OUTPUT
 
     - name: Update version in Directory.Build.props 🔄
       run: |
         sed -i "s/<Version>.*<\/Version>/<Version>${{ steps.extract_version.outputs.version }}<\/Version>/" ${{ env.LIB_PATH }}/Directory.Build.props
 
     - name: Restore dependencies 🔧
-      run: dotnet restore ${{ env.LIB_PATH }}
+      run: |
+        for project in ${{ steps.find_projects.outputs.projects }}; do
+          echo "Restoring: $project"
+          dotnet restore "$project"
+        done
 
     - name: Build all projects 🔨
-      run: dotnet build ${{ env.LIB_PATH }} --configuration Release --no-restore
+      run: |
+        for project in ${{ steps.find_projects.outputs.projects }}; do
+          echo "Building: $project"
+          dotnet build "$project" --configuration Release --no-restore
+        done
 
-    - name: Create NuGet output directory �
+    - name: Create NuGet output directory 📁
       run: mkdir -p ${{ env.NUGET_OUTPUT_DIR }}
 
     - name: Pack all projects 📦
       run: |
-        echo "Packing all projects in ${{ env.LIB_PATH }}..."
-        find ${{ env.LIB_PATH }} -name "*.csproj" -type f | while read project; do
+        echo "Packing all projects..."
+        for project in ${{ steps.find_projects.outputs.projects }}; do
           echo "Packing: $project"
           dotnet pack "$project" --configuration Release --no-build --output ${{ env.NUGET_OUTPUT_DIR }}
         done
