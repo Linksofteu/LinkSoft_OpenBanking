@@ -383,6 +383,7 @@
       },
       "SoftwareStatementRequest": {
         "type": "object",
+        "description": "Request for SoftwareStatement registration.\n            ",
         "additionalProperties": {},
         "required": [
           "softwareName",
@@ -403,56 +404,67 @@
         "properties": {
           "softwareName": {
             "type": "string",
+            "description": "Software Name in CZ.\n            ",
             "maxLength": 50,
             "minLength": 5
           },
           "softwareNameEn": {
             "type": "string",
+            "description": "Software Name in EN.\n            ",
             "maxLength": 50,
             "minLength": 5
           },
           "softwareId": {
             "type": "string",
+            "description": "A unique identifier string (e.g., a Universally Unique Identifier (UUID)) assigned by the client developer or software publisher used by registration endpoints to identify the\nclient software to be dynamically registered.\n            ",
             "maxLength": 64,
             "minLength": 0
           },
           "softwareVersion": {
             "type": "string",
+            "description": "A version identifier string for the client software identified by softwareId.  The value of the softwareVersion SHOULD change on any update to the client software identified\nby the same softwareId.\n            ",
             "maxLength": 30,
             "minLength": 1
           },
           "softwareUri": {
             "type": "string",
+            "description": "Software URL.\n            ",
             "format": "uri"
           },
           "redirectUris": {
             "type": "array",
+            "description": "Array of redirection URI strings for use in redirect-based flows such as the authorization code.\n            ",
             "items": {
               "type": "string",
               "format": "uri"
             }
           },
           "tokenEndpointAuthMethod": {
-            "type": "string"
+            "type": "string",
+            "description": "String indicator of the requested authentication method for the token endpoint.\n            "
           },
           "grantTypes": {
             "type": "array",
+            "description": "Array of OAuth 2.0 grant type strings that the client can use.\n            ",
             "items": {
               "type": "string"
             }
           },
           "responseTypes": {
             "type": "array",
+            "description": "Array of the OAuth 2.0 response type strings that the client can use at the authorization endpoint.\n            ",
             "items": {
               "type": "string"
             }
           },
           "registrationBackUri": {
             "type": "string",
+            "description": "URI string representing the endpoint where registration data is sent.\n            ",
             "format": "uri"
           },
           "contacts": {
             "type": "array",
+            "description": "Array of strings representing ways to contact people responsible for this client, typically email addresses.\n            ",
             "maxItems": 2,
             "minItems": 1,
             "items": {
@@ -461,14 +473,17 @@
           },
           "logoUri": {
             "type": "string",
+            "description": "URL string that references a logo for the client.\n            ",
             "format": "uri"
           },
           "tosUri": {
             "type": "string",
+            "description": "URL string that points to a human-readable terms of service document for the client that describes a contractual relationship between the end-user and the client that the\nend-user accepts when authorizing the client.\n            ",
             "format": "uri"
           },
           "policyUri": {
             "type": "string",
+            "description": "URL string that points to a human-readable privacy policy document that describes how the deployment organization collects, uses, retains, and discloses personal data.\n            ",
             "format": "uri"
           }
         }
@@ -687,6 +702,7 @@
       },
       "PageSlice": {
         "type": "object",
+        "description": "The list of transactions on the client's account according to the filter set in the request.",
         "additionalProperties": {},
         "required": [
           "content",
@@ -707,33 +723,41 @@
           },
           "totalPages": {
             "type": "integer",
+            "description": "Total number of pages.",
             "format": "int32"
           },
           "pageNumber": {
             "type": "integer",
+            "description": "Actual page number. Number of the first page is 0.",
             "format": "int32"
           },
           "pageSize": {
             "type": "integer",
+            "description": "Size of the page (how many elements are shown per page).",
             "format": "int32"
           },
           "numberOfElements": {
             "type": "integer",
+            "description": "Number of elements on the current page.",
             "format": "int32"
           },
           "first": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Is the first page."
           },
           "last": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Is the last page."
           },
           "empty": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Is actual page empty."
           }
         }
       },
       "AccountTransaction": {
         "type": "object",
+        "description": "The single account transaction details.",
         "additionalProperties": {},
         "required": [
           "lastUpdated",
@@ -746,6 +770,7 @@
         "properties": {
           "lastUpdated": {
             "type": "string",
+            "description": "The last transaction history update. Datetime is in ISO 8601 format.",
             "format": "date-time"
           },
           "accountType": {
@@ -779,11 +804,13 @@
           },
           "bookingDate": {
             "type": "string",
+            "description": "The date the payment was processed/accounted by bank in ISODate format (''YYYY-MM-DD'').",
             "format": "date-time",
             "nullable": true
           },
           "valueDate": {
             "type": "string",
+            "description": "The payment due date in ISODate format (''YYYY-MM-DD'').",
             "format": "date-time",
             "nullable": true
           },
@@ -801,6 +828,7 @@
           },
           "status": {
             "type": "string",
+            "description": "Status of the payment on account from bank point of view.",
             "nullable": true
           },
           "counterParty": {
@@ -821,6 +849,7 @@
           },
           "additionalTransactionInformation": {
             "type": "string",
+            "description": "Additional information about transaction provided by bank",
             "maxLength": 500,
             "minLength": 0,
             "nullable": true
@@ -837,7 +866,7 @@
       },
       "AccountType": {
         "type": "string",
-        "description": "",
+        "description": "Type of bank account.\nCODE:\n* KB - KB accounts\n* AG - aggregate accounts",
         "x-enumNames": [
           "KB",
           "AG"
@@ -849,7 +878,7 @@
       },
       "CreditDebitIndicator": {
         "type": "string",
-        "description": "",
+        "description": "Indicates whether the account balance is positive or negative\n\nCODE:\n* CREDIT - Accontunt balance is &gt; 0 or Account ballance = 0\n* DEBIT - Account balance is &lt; 0",
         "x-enumNames": [
           "CREDIT",
           "DEBIT"
@@ -885,10 +914,12 @@
       },
       "BankTransactionCode": {
         "type": "object",
+        "description": "Transaction code",
         "additionalProperties": {},
         "properties": {
           "code": {
             "type": "string",
+            "description": "Transaction code",
             "maxLength": 35,
             "minLength": 0,
             "nullable": true
@@ -905,7 +936,7 @@
       },
       "BankTransactionCodeIssuer": {
         "type": "string",
-        "description": "",
+        "description": "The identification of the issuer of the transaction code\n- CBA - Code of the transaction defined by CBA (Czech Bank Association) associated with specific payment. Every bank uses its own LOV for transaction codes which is derived from 1st to 3rd level of the transaction codes LOV defined by CBA standar for CAMT.053. For more information see https://mojebanka.kb.cz/file/cs/format_xml_vypis_ciselnik_trn.pdf\n- OTHER",
         "x-enumNames": [
           "CBA",
           "OTHER"
@@ -917,10 +948,12 @@
       },
       "CurrencyAmount": {
         "type": "object",
+        "description": "Amount with ISO currency.",
         "additionalProperties": {},
         "properties": {
           "value": {
             "type": "number",
+            "description": "The amount.",
             "format": "double",
             "nullable": true
           },
@@ -934,6 +967,7 @@
       },
       "TransactionCounterparty": {
         "type": "object",
+        "description": "Transaction counterparty details. Not all fields may be available for all transactions (e.g. for card transaction).",
         "additionalProperties": {},
         "properties": {
           "iban": {
@@ -944,6 +978,7 @@
           },
           "name": {
             "type": "string",
+            "description": "Name of the counterparty",
             "nullable": true
           },
           "accountNo": {
@@ -966,50 +1001,61 @@
           },
           "bankName": {
             "type": "string",
+            "description": "Counterparty account servicing institution name.",
             "nullable": true
           }
         }
       },
       "TransactionReferences": {
         "type": "object",
+        "description": "Transaction references",
         "additionalProperties": {},
         "properties": {
           "accountServicer": {
             "type": "string",
+            "description": "Identification of the payment assigned by bank",
             "nullable": true
           },
           "endToEndIdentification": {
             "type": "string",
+            "description": "Unique identification of the payment/transaction provided by the client who initiated the payment",
             "nullable": true
           },
           "variable": {
             "type": "string",
+            "description": "Variable symbol",
             "nullable": true
           },
           "constant": {
             "type": "string",
+            "description": "Constant symbol",
             "nullable": true
           },
           "specific": {
             "type": "string",
+            "description": "Specific symbol",
             "nullable": true
           },
           "receiver": {
             "type": "string",
+            "description": "Message to a payee / reference to receiver.",
             "nullable": true
           },
           "myDescription": {
             "type": "string",
+            "description": "Description for me",
             "nullable": true
           }
         }
       },
       "CardTransactionDetails": {
         "type": "object",
+        "description": "Details related to a CARD transaction",
         "additionalProperties": {},
         "properties": {
           "holdExpirationDate": {
             "type": "string",
+            "description": "Expiration date of a pending state transaction. ISO 8601 format.",
             "format": "date-time",
             "nullable": true
           }

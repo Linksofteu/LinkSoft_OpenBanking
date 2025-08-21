@@ -31,6 +31,7 @@ public class SoftwareStatementRegistrationDocumentModel
     /// <inheritdoc cref="SoftwareStatementRequest.SoftwareVersion"/>
     public string SoftwareVersion { get; set; }
 
+    /// <inheritdoc cref="SoftwareStatementRequest.Contacts"/>
     public ICollection<string> Contacts { get; set; }
 
     /// <inheritdoc cref="SoftwareStatementRequest.SoftwareUri"/>

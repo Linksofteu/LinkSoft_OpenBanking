@@ -10,6 +10,11 @@
  * ---------------------------------------------------------------
  */
 
+/**
+ * The identification of the issuer of the transaction code
+ * - CBA - Code of the transaction defined by CBA (Czech Bank Association) associated with specific payment. Every bank uses its own LOV for transaction codes which is derived from 1st to 3rd level of the transaction codes LOV defined by CBA standar for CAMT.053. For more information see https://mojebanka.kb.cz/file/cs/format_xml_vypis_ciselnik_trn.pdf
+ * - OTHER
+ */
 export enum BankTransactionCodeIssuer {
   CBA = "CBA",
   OTHER = "OTHER",
@@ -26,11 +31,24 @@ export enum TransactionType {
   OTHER = "OTHER",
 }
 
+/**
+ * Indicates whether the account balance is positive or negative
+ *
+ * CODE:
+ * * CREDIT - Accontunt balance is &gt; 0 or Account ballance = 0
+ * * DEBIT - Account balance is &lt; 0
+ */
 export enum CreditDebitIndicator {
   CREDIT = "CREDIT",
   DEBIT = "DEBIT",
 }
 
+/**
+ * Type of bank account.
+ * CODE:
+ * * KB - KB accounts
+ * * AG - aggregate accounts
+ */
 export enum AccountType {
   KB = "KB",
   AG = "AG",
@@ -40,51 +58,108 @@ export interface AccountDirectAccessApplicationManifest {
   /** @format guid */
   id: string;
   targetEnvironment: string;
+  /**
+   * Request for SoftwareStatement registration.
+   *
+   */
   softwareStatementRegistrationDocument: SoftwareStatementRequest;
   softwareStatement?: AccountDirectAccessApplicationManifestSoftwareStatementRegistrationResult | null;
   applicationRegistration?: AccountDirectAccessApplicationManifestApplicationRegistrationResult | null;
   applicationAuthorization?: AccountDirectAccessApplicationManifestApplicationAuthorizationResult | null;
 }
 
+/**
+ * Request for SoftwareStatement registration.
+ *
+ */
 export interface SoftwareStatementRequest {
   /**
+   * Software Name in CZ.
+   *
    * @minLength 5
    * @maxLength 50
    */
   softwareName: string;
   /**
+   * Software Name in EN.
+   *
    * @minLength 5
    * @maxLength 50
    */
   softwareNameEn: string;
   /**
+   * A unique identifier string (e.g., a Universally Unique Identifier (UUID)) assigned by the client developer or software publisher used by registration endpoints to identify the
+   * client software to be dynamically registered.
+   *
    * @minLength 0
    * @maxLength 64
    */
   softwareId: string;
   /**
+   * A version identifier string for the client software identified by softwareId.  The value of the softwareVersion SHOULD change on any update to the client software identified
+   * by the same softwareId.
+   *
    * @minLength 1
    * @maxLength 30
    */
   softwareVersion: string;
-  /** @format uri */
+  /**
+   * Software URL.
+   *
+   * @format uri
+   */
   softwareUri: string;
+  /**
+   * Array of redirection URI strings for use in redirect-based flows such as the authorization code.
+   *
+   */
   redirectUris: string[];
+  /**
+   * String indicator of the requested authentication method for the token endpoint.
+   *
+   */
   tokenEndpointAuthMethod: string;
+  /**
+   * Array of OAuth 2.0 grant type strings that the client can use.
+   *
+   */
   grantTypes: string[];
+  /**
+   * Array of the OAuth 2.0 response type strings that the client can use at the authorization endpoint.
+   *
+   */
   responseTypes: string[];
-  /** @format uri */
+  /**
+   * URI string representing the endpoint where registration data is sent.
+   *
+   * @format uri
+   */
   registrationBackUri: string;
   /**
+   * Array of strings representing ways to contact people responsible for this client, typically email addresses.
+   *
    * @maxItems 2
    * @minItems 1
    */
   contacts: string[];
-  /** @format uri */
+  /**
+   * URL string that references a logo for the client.
+   *
+   * @format uri
+   */
   logoUri: string;
-  /** @format uri */
+  /**
+   * URL string that points to a human-readable terms of service document for the client that describes a contractual relationship between the end-user and the client that the
+   * end-user accepts when authorizing the client.
+   *
+   * @format uri
+   */
   tosUri: string;
-  /** @format uri */
+  /**
+   * URL string that points to a human-readable privacy policy document that describes how the deployment organization collects, uses, retains, and discloses personal data.
+   *
+   * @format uri
+   */
   policyUri: string;
   [key: string]: any;
 }
@@ -185,25 +260,51 @@ export interface Account {
 
 export type ApplicationRequestBase = object;
 
+/** The list of transactions on the client's account according to the filter set in the request. */
 export interface PageSlice {
   content: AccountTransaction[];
-  /** @format int32 */
+  /**
+   * Total number of pages.
+   * @format int32
+   */
   totalPages: number;
-  /** @format int32 */
+  /**
+   * Actual page number. Number of the first page is 0.
+   * @format int32
+   */
   pageNumber: number;
-  /** @format int32 */
+  /**
+   * Size of the page (how many elements are shown per page).
+   * @format int32
+   */
   pageSize: number;
-  /** @format int32 */
+  /**
+   * Number of elements on the current page.
+   * @format int32
+   */
   numberOfElements: number;
+  /** Is the first page. */
   first: boolean;
+  /** Is the last page. */
   last: boolean;
+  /** Is actual page empty. */
   empty: boolean;
   [key: string]: any;
 }
 
+/** The single account transaction details. */
 export interface AccountTransaction {
-  /** @format date-time */
+  /**
+   * The last transaction history update. Datetime is in ISO 8601 format.
+   * @format date-time
+   */
   lastUpdated: string;
+  /**
+   * Type of bank account.
+   * CODE:
+   * * KB - KB accounts
+   * * AG - aggregate accounts
+   */
   accountType: AccountType;
   entryReference?: string | null;
   /**
@@ -211,20 +312,36 @@ export interface AccountTransaction {
    * @maxLength 34
    */
   iban: string;
+  /**
+   * Indicates whether the account balance is positive or negative
+   *
+   * CODE:
+   * * CREDIT - Accontunt balance is &gt; 0 or Account ballance = 0
+   * * DEBIT - Account balance is &lt; 0
+   */
   creditDebitIndicator: CreditDebitIndicator;
   transactionType: TransactionType;
   bankTransactionCode?: BankTransactionCode | null;
+  /** Amount with ISO currency. */
   amount: CurrencyAmount;
-  /** @format date-time */
+  /**
+   * The date the payment was processed/accounted by bank in ISODate format (''YYYY-MM-DD'').
+   * @format date-time
+   */
   bookingDate?: string | null;
-  /** @format date-time */
+  /**
+   * The payment due date in ISODate format (''YYYY-MM-DD'').
+   * @format date-time
+   */
   valueDate?: string | null;
   instructed?: CurrencyAmount | null;
   reversalIndicator?: boolean | null;
+  /** Status of the payment on account from bank point of view. */
   status?: string | null;
   counterParty?: TransactionCounterparty | null;
   references?: TransactionReferences | null;
   /**
+   * Additional information about transaction provided by bank
    * @minLength 0
    * @maxLength 500
    */
@@ -233,8 +350,10 @@ export interface AccountTransaction {
   [key: string]: any;
 }
 
+/** Transaction code */
 export interface BankTransactionCode {
   /**
+   * Transaction code
    * @minLength 0
    * @maxLength 35
    */
@@ -243,8 +362,12 @@ export interface BankTransactionCode {
   [key: string]: any;
 }
 
+/** Amount with ISO currency. */
 export interface CurrencyAmount {
-  /** @format double */
+  /**
+   * The amount.
+   * @format double
+   */
   value?: number | null;
   /**
    * @minLength 0
@@ -254,12 +377,14 @@ export interface CurrencyAmount {
   [key: string]: any;
 }
 
+/** Transaction counterparty details. Not all fields may be available for all transactions (e.g. for card transaction). */
 export interface TransactionCounterparty {
   /**
    * @minLength 0
    * @maxLength 34
    */
   iban?: string | null;
+  /** Name of the counterparty */
   name?: string | null;
   /**
    * @minLength 0
@@ -276,23 +401,36 @@ export interface TransactionCounterparty {
    * @maxLength 4
    */
   bankCode?: string | null;
+  /** Counterparty account servicing institution name. */
   bankName?: string | null;
   [key: string]: any;
 }
 
+/** Transaction references */
 export interface TransactionReferences {
+  /** Identification of the payment assigned by bank */
   accountServicer?: string | null;
+  /** Unique identification of the payment/transaction provided by the client who initiated the payment */
   endToEndIdentification?: string | null;
+  /** Variable symbol */
   variable?: string | null;
+  /** Constant symbol */
   constant?: string | null;
+  /** Specific symbol */
   specific?: string | null;
+  /** Message to a payee / reference to receiver. */
   receiver?: string | null;
+  /** Description for me */
   myDescription?: string | null;
   [key: string]: any;
 }
 
+/** Details related to a CARD transaction */
 export interface CardTransactionDetails {
-  /** @format date-time */
+  /**
+   * Expiration date of a pending state transaction. ISO 8601 format.
+   * @format date-time
+   */
   holdExpirationDate?: string | null;
   [key: string]: any;
 }

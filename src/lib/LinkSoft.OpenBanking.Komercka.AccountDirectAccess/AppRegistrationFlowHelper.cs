@@ -20,10 +20,19 @@ public static class AppRegistrationFlowHelper
     public static string GenerateAppRegistrationFlowUri(string baseUrl, ApplicationRegistrationRequest registrationRequest, string? state)
     {
         string requestJson = JsonSerializer.Serialize(registrationRequest);
-        // Currently not accepted by KB Sandbox (returns BadRequest)
-        // var urlEncodedJson = Microsoft.IdentityModel.Tokens.Base64UrlEncoder.Encode(requestJson);
-        string urlEncodedJson = Uri.EscapeDataString(Convert.ToBase64String(Encoding.UTF8.GetBytes(requestJson)));
-
+        
+        /* Issue #2
+         * registrationRequest param data should be base64 encoded (see https://github.com/komercka/adaa-client/wiki/03-Application-Registration-OAuth2)
+         * Problem is, base64 can include +, / and = characters, which are not URL friendly.
+         * I tried to use base64url encoding but unfortunately it is not accepted by the KB sandbox (returns BadRequest).
+         * I tried to use base64 + ulr encode, which worked for some time but then stopped working for KB Production (see https://github.com/Linksofteu/LinkSoft_OpenBanking/issues/2)
+         *
+         * As I dont want to introduce any logic based on target environment, only way right now is to use base64 encoding as is,
+         * even though it is not URL friendly... 
+         */
+        //var urlEncodedJson = Microsoft.IdentityModel.Tokens.Base64UrlEncoder.Encode(requestJson);
+        string urlEncodedJson = Convert.ToBase64String(Encoding.UTF8.GetBytes(requestJson));
+        
         StringBuilder urlBuilder = new(baseUrl);
         urlBuilder.Append("?registrationRequest=").Append(urlEncodedJson);
 

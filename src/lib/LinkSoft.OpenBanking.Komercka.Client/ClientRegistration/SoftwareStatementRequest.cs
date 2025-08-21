@@ -114,7 +114,9 @@ public class SoftwareStatementRequest
     /// <summary>
     ///     Array of strings representing ways to contact people responsible for this client, typically email addresses.
     /// </summary>
-
+    /// <remarks>
+    ///     Exact requirement atm.:  should have exactly one element starting with 'email:' and one optional element starting with 'phone:'
+    /// </remarks>
     [JsonPropertyName("contacts")]
     [Required]
     [MinLength(1)]
