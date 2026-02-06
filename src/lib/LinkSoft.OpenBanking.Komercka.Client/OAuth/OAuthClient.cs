@@ -42,7 +42,7 @@ public class OAuthClient
     /// <returns></returns>
     public Task<TokenResponse> RequestAuthorizationCodeTokenAsync(AuthorizationCodeTokenRequest request, CancellationToken cancellationToken = default)
     {
-        return GetTokenAsync(request.GetRequestParameters(), cancellationToken);
+        return GetTokenAsync(request.GetRequestParameters(), request.CorrelationId, cancellationToken);
     }
 
     /// <summary>
@@ -53,11 +53,11 @@ public class OAuthClient
     /// <returns></returns>
     public Task<TokenResponse> RequestRefreshTokenAsync(RefreshTokenRequest request, CancellationToken cancellationToken = default)
     {
-        return GetTokenAsync(request.GetRequestParameters(), cancellationToken);
+        return GetTokenAsync(request.GetRequestParameters(), request.CorrelationId, cancellationToken);
     }
 
 
-    private async Task<TokenResponse> GetTokenAsync(IEnumerable<KeyValuePair<string, string>> parameters, CancellationToken cancellationToken)
+    private async Task<TokenResponse> GetTokenAsync(IEnumerable<KeyValuePair<string, string>> parameters, Guid correlationId, CancellationToken cancellationToken)
     {
         using HttpRequestMessage request = new();
 
@@ -65,6 +65,7 @@ public class OAuthClient
         request.Method = new HttpMethod("POST");
         request.RequestUri = new Uri(BaseUrl, UriKind.RelativeOrAbsolute);
         request.Headers.Accept.Add(MediaTypeWithQualityHeaderValue.Parse("application/json"));
+        request.Headers.Add(Constants.CorrelationIdHeaderName, correlationId == Guid.Empty ? Guid.NewGuid().ToString() : correlationId.ToString());
 
         if (string.IsNullOrEmpty(ApiKey))
         {
