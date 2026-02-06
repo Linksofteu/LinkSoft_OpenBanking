@@ -32,10 +32,11 @@ public class AccountDirectAccessManagementClient
     ///     Register new software statement.
     /// </summary>
     /// <param name="clientRegistrationRequest"></param>
+    /// <param name="correlationId">Correlation ID used for tracing. If not set, a new GUID will be generated.</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns></returns>
     /// <exception cref="Exception"></exception>
-    public async Task<SoftwareStatementRegistrationResult> RegisterSoftwareStatementAsync(SoftwareStatementRequest clientRegistrationRequest, CancellationToken cancellationToken)
+    public async Task<SoftwareStatementRegistrationResult> RegisterSoftwareStatementAsync(SoftwareStatementRequest clientRegistrationRequest, Guid correlationId = default, CancellationToken cancellationToken = default)
     {
         ClientRegistrationClient client = new(_httpClient)
         {
@@ -49,7 +50,7 @@ public class AccountDirectAccessManagementClient
             _logger.RegisteringSoftwareStatement(LogLevel.Debug, _options.SoftwareStatementsEndpoint.BaseUrl, serialized);
         }
 
-        string jwt = await client.PostSoftwareStatementsAsync(clientRegistrationRequest, cancellationToken);
+        string jwt = await client.PostSoftwareStatementsAsync(clientRegistrationRequest, correlationId, cancellationToken);
 
         return new SoftwareStatementRegistrationResult
         {

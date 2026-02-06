@@ -80,6 +80,7 @@ public partial class ClientRegistrationClient
     partial void PrepareRequest(HttpClient client, HttpRequestMessage request, StringBuilder urlBuilder);
     partial void ProcessResponse(HttpClient client, HttpResponseMessage response);
 
+    /// <param name="correlationId">Correlation ID used for tracing. If not set, a new GUID will be generated.</param>
     /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
     /// <summary>
     ///     API to register new software.
@@ -87,7 +88,7 @@ public partial class ClientRegistrationClient
     /// <param name="requestContent">Data for new software statement.</param>
     /// <returns>SoftwareStatement in form of JWT created.</returns>
     /// <exception cref="AccountDirectAccessApiException">A server side error occurred.</exception>
-    public virtual async Task<string> PostSoftwareStatementsAsync(SoftwareStatementRequest requestContent, CancellationToken cancellationToken)
+    public virtual async Task<string> PostSoftwareStatementsAsync(SoftwareStatementRequest requestContent, Guid correlationId = default, CancellationToken cancellationToken = default)
     {
         using HttpRequestMessage request = new();
 
@@ -95,6 +96,7 @@ public partial class ClientRegistrationClient
         request.Content = new StringContent(serialized, Encoding.UTF8, MediaTypeNames.Application.Json);
         request.Method = new HttpMethod("POST");
         request.Headers.Accept.Add(MediaTypeWithQualityHeaderValue.Parse("text/plain; charset=utf-8"));
+        request.AddCorrelationIdHeader(correlationId);
 
         StringBuilder urlBuilder = new();
         if (!string.IsNullOrEmpty(_baseUrl))

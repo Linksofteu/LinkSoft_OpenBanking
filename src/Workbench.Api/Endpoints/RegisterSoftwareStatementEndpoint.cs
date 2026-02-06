@@ -37,16 +37,16 @@ public class RegisterSoftwareStatementEndpoint : Endpoint<RegisterSoftwareStatem
 
         if (manifest == null)
         {
-            await SendNotFoundAsync();
+            await SendNotFoundAsync(ct);
             return;
         }
 
-        SoftwareStatementRegistrationResult registrationResult = await _managementClient.RegisterSoftwareStatementAsync(manifest.SoftwareStatementRegistrationDocument, ct);
+        SoftwareStatementRegistrationResult registrationResult = await _managementClient.RegisterSoftwareStatementAsync(manifest.SoftwareStatementRegistrationDocument, cancellationToken: ct);
 
         manifest.SoftwareStatement = new AccountDirectAccessApplicationManifest.SoftwareStatementRegistrationResult(registrationResult.Jwt, registrationResult.ValidToUtc);
         await _applicationStore.SaveApplication(manifest);
 
-        await SendAsync(manifest);
+        await SendAsync(manifest, cancellation: ct);
     }
 }
 
