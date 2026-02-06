@@ -6,7 +6,7 @@ function Set-Secret {
     
     Write-Host "Setting secret $SecretKey" -ForegroundColor DarkGray
                 
-    dotnet user-secrets set $SecretKey $SecretValue --project "../Workbench.Api/Workbench.Api.csproj"
+    dotnet user-secrets set $SecretKey $SecretValue --project "../src/Workbench.Api/Workbench.Api.csproj"
                 
     if ($LASTEXITCODE -ne 0) {
         Write-Host "Failed to set secret $SecretKey" -ForegroundColor Red
