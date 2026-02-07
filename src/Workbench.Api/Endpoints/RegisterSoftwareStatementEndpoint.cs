@@ -37,7 +37,7 @@ public class RegisterSoftwareStatementEndpoint : Endpoint<RegisterSoftwareStatem
 
         if (manifest == null)
         {
-            await SendNotFoundAsync(ct);
+            await Send.NotFoundAsync(ct);
             return;
         }
 
@@ -46,7 +46,7 @@ public class RegisterSoftwareStatementEndpoint : Endpoint<RegisterSoftwareStatem
         manifest.SoftwareStatement = new AccountDirectAccessApplicationManifest.SoftwareStatementRegistrationResult(registrationResult.Jwt, registrationResult.ValidToUtc);
         await _applicationStore.SaveApplication(manifest);
 
-        await SendAsync(manifest, cancellation: ct);
+        await Send.OkAsync(manifest, cancellation: ct);
     }
 }
 

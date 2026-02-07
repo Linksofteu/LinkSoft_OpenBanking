@@ -51,6 +51,6 @@ public class CreateApplicationEndpoint : Endpoint<SoftwareStatementRegistrationD
         AccountDirectAccessApplicationManifest manifest = new(_options.Value.TargetEnvironment, registrationDocument);
         await _applicationStore.SaveApplication(manifest);
 
-        await SendAsync(manifest);
+        await Send.OkAsync(manifest);
     }
 }

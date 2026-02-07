@@ -27,6 +27,6 @@ public class GetAllApplicationsEndpoint : EndpointWithoutRequest<IList<AccountDi
     public override async Task HandleAsync(CancellationToken ct)
     {
         IList<AccountDirectAccessApplicationManifest> apps = await _applicationStore.GetApplicationsAsync(_options.Value.TargetEnvironment);
-        await SendAsync(apps);
+        await Send.OkAsync(apps);
     }
 }

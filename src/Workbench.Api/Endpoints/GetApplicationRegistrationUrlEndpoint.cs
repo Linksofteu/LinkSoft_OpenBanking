@@ -39,13 +39,13 @@ public class GetApplicationRegistrationUrlEndpoint : Endpoint<ApplicationRequest
         AccountDirectAccessApplicationManifest? application = await _applicationStore.GetApplicationAsync(req.ApplicationId);
         if (application == null)
         {
-            await SendResultAsync(TypedResults.NotFound());
+            await Send.ResultAsync(TypedResults.NotFound());
             return;
         }
 
         if (application.SoftwareStatement == null || application.SoftwareStatementRegistrationDocument == null)
         {
-            await SendResultAsync(TypedResults.BadRequest("Software Statement is not registered"));
+            await Send.ResultAsync(TypedResults.BadRequest("Software Statement is not registered"));
             return;
         }
 
@@ -64,6 +64,6 @@ public class GetApplicationRegistrationUrlEndpoint : Endpoint<ApplicationRequest
 
         string appRegistrationUri = AppRegistrationFlowHelper.GenerateAppRegistrationFlowUri(_adaaOptions.Value.ApplicationRegistration.Url, registrationRequest, state);
 
-        await SendResultAsync(TypedResults.Ok(appRegistrationUri));
+        await Send.ResultAsync(TypedResults.Ok(appRegistrationUri));
     }
 }

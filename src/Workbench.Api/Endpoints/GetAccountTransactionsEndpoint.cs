@@ -32,7 +32,7 @@ public class GetAccountTransactionsEndpoint : Endpoint<GetAccountTransactionsReq
         }
 
         IAccountDirectAccessClient client = _clientFactory.GetClient(application);
-        await SendOkAsync(
+        await Send.OkAsync(
             await client.GetTransactionsAsync(
                 req.AccountId,
                 DateTimeOffset.UtcNow, 

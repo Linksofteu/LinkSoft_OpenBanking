@@ -87,7 +87,7 @@ public class HandleCallbackFlowDataEndpoint : Endpoint<HandleCallbackDataRequest
 
             await _applicationStore.SaveApplication(application);
 
-            await SendAsync(new HandleCallbackDataResponse(application));
+            await Send.OkAsync(new HandleCallbackDataResponse(application));
 
             return;
         }
@@ -118,7 +118,7 @@ public class HandleCallbackFlowDataEndpoint : Endpoint<HandleCallbackDataRequest
                 };
                 await _applicationStore.SaveApplication(application);
 
-                await SendAsync(new HandleCallbackDataResponse(application));
+                await Send.OkAsync(new HandleCallbackDataResponse(application));
             }
             else
             {
