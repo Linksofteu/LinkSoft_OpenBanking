@@ -34,13 +34,13 @@ public class GetApplicationAuthorizationUrlEndpoint : Endpoint<ApplicationReques
         AccountDirectAccessApplicationManifest? application = await _applicationStore.GetApplicationAsync(req.ApplicationId);
         if (application == null)
         {
-            await SendResultAsync(TypedResults.NotFound());
+            await Send.ResultAsync(TypedResults.NotFound());
             return;
         }
 
         if (application.ApplicationRegistration == null)
         {
-            await SendResultAsync(TypedResults.BadRequest("Application is not registered yet."));
+            await Send.ResultAsync(TypedResults.BadRequest("Application is not registered yet."));
             return;
         }
 
@@ -51,6 +51,6 @@ public class GetApplicationAuthorizationUrlEndpoint : Endpoint<ApplicationReques
             application.Id.ToString("N")
         );
 
-        await SendResultAsync(TypedResults.Ok(appAuthorizationUri));
+        await Send.ResultAsync(TypedResults.Ok(appAuthorizationUri));
     }
 }

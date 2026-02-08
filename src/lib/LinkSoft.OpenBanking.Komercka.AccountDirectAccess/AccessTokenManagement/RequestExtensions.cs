@@ -16,7 +16,7 @@ public static class RequestExtensions
     {
         // Set the client ID on the request so down the line we know what client ID this token was issued for
         request.Options.Set(ClientIdOptionsKey, token.ClientId);
-        request.SetToken("Bearer", token.AccessTokenValue);
+        request.SetToken("Bearer", token.AccessTokenValue ?? throw new InvalidOperationException("Token is null"));
     }
 
     /// <summary>

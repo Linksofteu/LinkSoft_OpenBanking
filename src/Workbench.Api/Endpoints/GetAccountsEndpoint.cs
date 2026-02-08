@@ -32,6 +32,6 @@ public class GetAccountsEndpoint : Endpoint<ApplicationRequestBase, ICollection<
         }
 
         IAccountDirectAccessClient client = _clientFactory.GetClient(application);
-        await SendOkAsync(await client.GetAccountsAsync(ct));
+        await Send.OkAsync(await client.GetAccountsAsync(ct));
     }
 }
