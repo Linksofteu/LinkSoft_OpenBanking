@@ -1,4 +1,5 @@
-﻿using LinkSoft.OpenBanking.Komercka.Client.AccountDirectAccess;
+﻿using LinkSoft.OpenBanking.Komercka.Client;
+using LinkSoft.OpenBanking.Komercka.Client.AccountDirectAccess;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
@@ -38,6 +39,7 @@ internal class AccountDirectAccessClientWithAuthorizationContext<TContext> : Acc
     {
         request.Options.Set(IAccountDirectAccessClientAuthorizationContext.AuthorizationContextKey, _context);
         request.Headers.Add("ApiKey", _options.AccountDirectAccessEndpoint.ApiKey);
+        request.AddCorrelationIdHeader(Guid.NewGuid());
 
         return base.PrepareRequestAsync(client, request, urlBuilder, cancellationToken);
     }
