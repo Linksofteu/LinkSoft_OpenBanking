@@ -1,4 +1,4 @@
-﻿using FastEndpoints;
+using FastEndpoints;
 using FastEndpoints.Swagger;
 using LinkSoft.OpenBanking.Komercka.AccountDirectAccess;
 using LinkSoft.OpenBanking.Komercka.AccountDirectAccess.AccessTokenManagement;
@@ -41,11 +41,12 @@ public static class WebApplicationBuilderExtensions
             }
         );
 
-        // HybridCache is used by for caching access tokens by ApplicationBoundAccessTokenRetriever
+        // HybridCache is used by for caching access tokens by HybridCacheTokenRetriever
         serviceCollection.AddHybridCache();
 
         serviceCollection.AddSingleton<StateWorkaroundHandler>();
         serviceCollection.AddTransient<AccessTokenRequestDelegatingHandler>();
+        serviceCollection.AddTransient<KbHttpLoggingHandler>();
         serviceCollection.AddTransient<ITokenRetriever, HybridCacheTokenRetriever>();
 
         if (!string.IsNullOrEmpty(workbenchOptions.Certificate) && !string.IsNullOrEmpty(workbenchOptions.CertificatePassword))
@@ -54,12 +55,14 @@ public static class WebApplicationBuilderExtensions
             
             // management client needs TLS with client auth
             serviceCollection.AddHttpClient<AccountDirectAccessManagementClient>()
-                .ConfigurePrimaryHttpMessageHandlerForTlsAuth(certificate);
+                .ConfigurePrimaryHttpMessageHandlerForTlsAuth(certificate)
+                .AddHttpMessageHandler<KbHttpLoggingHandler>();
 
             // ADAA client itself needs TLS with client auth + access token
             serviceCollection.AddHttpClient<ApplicationManifestBoundAdaaClientFactory>()
                 .ConfigurePrimaryHttpMessageHandlerForTlsAuth(certificate)
-                .AddHttpMessageHandler<AccessTokenRequestDelegatingHandler>();
+                .AddHttpMessageHandler<AccessTokenRequestDelegatingHandler>()
+                .AddHttpMessageHandler<KbHttpLoggingHandler>();
         }
         else
         {
@@ -68,9 +71,11 @@ public static class WebApplicationBuilderExtensions
                 throw new InvalidOperationException("Certificate is required for production environment.");
             }
 
-            serviceCollection.AddHttpClient<AccountDirectAccessManagementClient>();
+            serviceCollection.AddHttpClient<AccountDirectAccessManagementClient>()
+                .AddHttpMessageHandler<KbHttpLoggingHandler>();
             serviceCollection.AddHttpClient<ApplicationManifestBoundAdaaClientFactory>()
-                .AddHttpMessageHandler<AccessTokenRequestDelegatingHandler>();
+                .AddHttpMessageHandler<AccessTokenRequestDelegatingHandler>()
+                .AddHttpMessageHandler<KbHttpLoggingHandler>();
         }
     }
 
