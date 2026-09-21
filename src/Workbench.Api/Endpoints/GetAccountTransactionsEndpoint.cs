@@ -35,8 +35,8 @@ public class GetAccountTransactionsEndpoint : Endpoint<GetAccountTransactionsReq
         await Send.OkAsync(
             await client.GetTransactionsAsync(
                 req.AccountId,
-                DateTimeOffset.UtcNow, 
-                DateTimeOffset.UtcNow.AddMonths(-1),
+                null, 
+                DateTimeOffset.UtcNow.AddMonths(-12),
                 0,
                 100,
                 ct

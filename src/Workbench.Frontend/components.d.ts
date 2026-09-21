@@ -9,6 +9,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AccountList: typeof import('./src/components/AccountList.vue')['default']
+    AccountTransactions: typeof import('./src/components/AccountTransactions.vue')['default']
     ApplicationCard: typeof import('./src/components/ApplicationCard.vue')['default']
     Button: typeof import('./src/components/ui/button/Button.vue')['default']
     Card: typeof import('./src/components/ui/card/Card.vue')['default']
@@ -35,6 +36,7 @@ declare module 'vue' {
     TableHeader: typeof import('./src/components/ui/table/TableHeader.vue')['default']
     TableRow: typeof import('./src/components/ui/table/TableRow.vue')['default']
     Textarea: typeof import('./src/components/ui/textarea/Textarea.vue')['default']
-    TransactionsPageView: typeof import('./src/components/TransactionsPageView.vue')['default']
+    TransactionsPageView: typeof import('./src/components/TransactionsView.vue')['default']
+    TransactionsView: typeof import('./src/components/TransactionsView.vue')['default']
   }
 }
