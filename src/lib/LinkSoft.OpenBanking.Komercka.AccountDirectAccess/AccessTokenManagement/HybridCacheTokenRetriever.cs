@@ -151,7 +151,7 @@ public class HybridCacheTokenRetriever : ITokenRetriever
             // Calculate how long this access token should be valid in the cache. 
             // Note, the expiration time was just calculated by adding time.GetUTcNow() to the token lifetime.
             // So for now it's safe to subtract this time from the expiration time.
-            _cacheDuration[cacheKey] = DateTimeOffset.UtcNow - token.Expiration;
+            _cacheDuration[cacheKey] = token.Expiration - DateTimeOffset.UtcNow;
 
             _logger.LogDebug("Caching ADAA access token. Expiration: {Expiration}", token.Expiration);
         }
