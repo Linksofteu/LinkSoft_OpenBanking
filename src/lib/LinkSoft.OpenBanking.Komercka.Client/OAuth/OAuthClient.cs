@@ -91,7 +91,7 @@ public class OAuthClient
             int status = (int)response.StatusCode;
             if (status == 200)
             {
-                ObjectResponseResult<TokenResponse> objectResponse = await ReadObjectResponseAsync<TokenResponse>(response, headers).ConfigureAwait(false);
+                ObjectResponseResult<TokenResponse> objectResponse = await ReadObjectResponseAsync<TokenResponse>(response, headers, cancellationToken).ConfigureAwait(false);
                 if (objectResponse.Object == null)
                 {
                     throw new AccountDirectAccessApiException("Response was null which was not expected.", status, objectResponse.Text, headers, null);
@@ -101,7 +101,7 @@ public class OAuthClient
             }
             else if (status == 400)
             {
-                ObjectResponseResult<OAuthErrorResponse> objectResponse = await ReadObjectResponseAsync<OAuthErrorResponse>(response, headers).ConfigureAwait(false);
+                ObjectResponseResult<OAuthErrorResponse> objectResponse = await ReadObjectResponseAsync<OAuthErrorResponse>(response, headers, cancellationToken).ConfigureAwait(false);
                 if (objectResponse.Object == null)
                 {
                     throw new AccountDirectAccessApiException("Response was null which was not expected.", status, objectResponse.Text, headers, null);
@@ -134,9 +134,16 @@ public class OAuthClient
         }
     }
 
-    protected async Task<ObjectResponseResult<T>> ReadObjectResponseAsync<T>(HttpResponseMessage response, IReadOnlyDictionary<string, IEnumerable<string>> headers)
+    protected Task<ObjectResponseResult<T>> ReadObjectResponseAsync<T>(HttpResponseMessage response, IReadOnlyDictionary<string, IEnumerable<string>> headers)
     {
-        string responseText = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+        return ReadObjectResponseAsync<T>(response, headers, CancellationToken.None);
+    }
+
+    protected async Task<ObjectResponseResult<T>> ReadObjectResponseAsync<T>(HttpResponseMessage response, IReadOnlyDictionary<string, IEnumerable<string>> headers,
+        CancellationToken cancellationToken)
+    {
+        // ResponseHeadersRead completes before the body is read, so cancellation must also be passed to the content read.
+        string responseText = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
         try
         {
             T? typedBody = JsonSerializer.Deserialize<T>(responseText);

@@ -105,6 +105,11 @@ public class AccountDirectAccessManagementClient
         {
             failure = TokenResult.Failure(exception.Message, exception.Response);
         }
+        catch (OperationCanceledException)
+        {
+            // Preserve cancellation instead of reporting it as an authentication failure.
+            throw;
+        }
         catch (Exception exception)
         {
             failure = TokenResult.Failure(exception.Message);
@@ -185,6 +190,11 @@ public class AccountDirectAccessManagementClient
         catch (AccountDirectAccessApiException exception)
         {
             failure = TokenResult.Failure(exception.Message, exception.Response);
+        }
+        catch (OperationCanceledException)
+        {
+            // Preserve cancellation instead of reporting it as an authentication failure.
+            throw;
         }
         catch (Exception exception)
         {
