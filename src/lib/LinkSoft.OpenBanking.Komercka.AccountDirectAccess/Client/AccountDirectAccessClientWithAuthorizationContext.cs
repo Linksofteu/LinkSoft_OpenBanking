@@ -27,6 +27,29 @@ internal class AccountDirectAccessClientWithAuthorizationContext<TContext> : Acc
         BaseUrl = options.AccountDirectAccessEndpoint.BaseUrl;
     }
 
+    /// <inheritdoc />
+    /// <remarks>
+    ///     KB documents UTC timestamps for transaction filters. The generated client formats dates with a literal Z
+    ///     without converting their offset, which would change the requested instant for non-UTC values.
+    ///     Normalize here so regeneration preserves this fix. The overload without a cancellation token also calls this override.
+    /// </remarks>
+    public override Task<PageSlice> GetTransactionsAsync(string accountId, DateTimeOffset? toDateTime, DateTimeOffset? fromDateTime, int page, int? size,
+        CancellationToken cancellationToken)
+    {
+        return base.GetTransactionsAsync(accountId, toDateTime?.ToUniversalTime(), fromDateTime?.ToUniversalTime(), page, size, cancellationToken);
+    }
+
+    /// <inheritdoc />
+    /// <remarks>
+    ///     KB's statement examples use UTC timestamps. As with transaction filters, the generated client adds a literal Z
+    ///     without converting the offset. Normalize here to preserve the requested instant without editing generated code.
+    ///     The overload without a cancellation token also calls this override.
+    /// </remarks>
+    public override Task<ICollection<Statement>> GetAccountStatementsAsync(string accountId, DateTimeOffset dateFrom, CancellationToken cancellationToken)
+    {
+        return base.GetAccountStatementsAsync(accountId, dateFrom.ToUniversalTime(), cancellationToken);
+    }
+
     /// <summary>
     ///     Prepare request by adding authorization context and API key.
     /// </summary>
